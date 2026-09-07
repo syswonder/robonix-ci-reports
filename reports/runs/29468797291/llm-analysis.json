@@ -1,0 +1,163 @@
+{
+  "title": "All 15 scenarios passed — epoch-safe map persistence changes verified",
+  "stage": "success",
+  "summary": "All 15 Webots integration scenarios passed (15/15, 100%). The PR introduces epoch-safe semantic map persistence keyed by save tokens, replacing the legacy warm-restore approach. Changes span README, annotations, map_binding, map_meta, persistence, builder, service, object_registry, web, and tests. The CI exercised builtin, cap, and flow scenarios including camera/lidar snapshots, exploration, navigation, memory, speech, voiceprint, and scene object listing — all green.",
+  "pr_changes": [
+    "system/scene/README.md: Documented epoch rule, Save/Load/Delete map library, SCENE_RESTORE_ON_START legacy mode, and lifecycle watcher epoch response.",
+    "system/scene/scene_service/annotations.py: Added has_saved() method to guard against overwriting never-loaded room annotations.",
+    "system/scene/scene_service/map_binding.py: Updated docstring to note lifecycle watcher acts on generation bump (flush + re-anchor).",
+    "system/scene/scene_service/map_meta.py: New file — MapMetaStore and MapSemanticMeta for epoch sidecar files pairing saved maps with object snapshot partitions.",
+    "system/scene/scene_service/persistence.py: Added partition-scoped persist/load_all, purge_live_partitions, strict mode for Load, and explicit partition parameter.",
+    "system/scene/scene_service/scene_graph/builder.py: Object store only wired in legacy SCENE_RESTORE_ON_START mode; default Save/Load snapshot path passes None.",
+    "system/scene/scene_service/service.py: Major rewrite of lifecycle_watch to react to epoch bumps (flush objects, flag annotations stale). Added live_binding dict, map_ops_lock, MapMetaStore init, live-session cleanup, and purge_live_partitions call.",
+    "system/scene/scene_service/state/object_registry.py: Added clear_objects() method for lifecycle flush.",
+    "system/scene/scene_service/web.py: Added ops_lock, _persist_scene_objects with partition, _restore_scene_objects with strict mode, _latched_lifecycle helper, reserved map ID validation, and epoch-safe Save/Load/Delete logic with sidecar commit ordering.",
+    "system/scene/tests/test_annotations.py: Added test_has_saved_reflects_persisted_partitions_only.",
+    "system/scene/tests/test_lifecycle_flush.py: New file — state-machine tests for lifecycle watcher epoch response (confirm, bump, cross-map drift, facade load not drift, survival with None stores).",
+    "system/scene/tests/test_map_epoch.py: New file — epoch-safety tests for web map facade Save/Load/Delete with fake object store and ASGI calls.",
+    "system/scene/tests/test_map_meta.py: New file — unit tests for MapMetaStore roundtrip, corrupt sidecar, delete, sanitization, and forward compatibility.",
+    "system/scene/tests/test_persistence.py: Added test_partition_scoped_operations for explicit partition persist/load_all and purge_live_partitions."
+  ],
+  "test_result": "Webots CI ran 15 scenarios across builtin (4), cap (8), and flow (3) families. All passed. Exercised capabilities: camera/lidar snapshots, map save, memory save/search, navigation, speech, voiceprint list, explore start/status/cancel, scene list_objects/goal_near, and executor builtins (read/write/list_dir/run_command/get_all_plans/get_plan_status/stop_plan_at). The scene map persistence test (scene-map-persistence.txt) verified Save/Load/Delete with epoch sidecar: 16/16 checks passed.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 1,
+      "text": "map_id=ci_scene_map_29468797291"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 2,
+      "text": "save_response {\"annotations\": 0, \"detail\": \"saved spatial map ci_scene_map_29468797291; rtabmap backup completed; source=rtabmap backup artifact; sqlite_backup=sqlite backup ok; published optimized global map\", \"map_id\": \"ci_scene_map_29468797291\", \"objects\": 9, \"ok\": true, \"snapshot_partition\": \"ci_scene_map_29468797291__s1\", ...}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 3,
+      "text": "PASS scene_save_ok saved spatial map ci_scene_map_29468797291; rtabmap backup completed; source=rtabmap backup artifact; sqlite_backup=sqlite backup ok; published optimized global map"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 4,
+      "text": "PASS scene_validation_spatial_ok ok"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 5,
+      "text": "PASS scene_validation_has_preview validation={'map_id': 'ci_scene_map_29468797291', 'spatial_ok': True, 'artifact_detail': 'ok', 'artifact_size': 657965056, 'has_preview': True, 'updated': 1784172502, 'object_count': 9, 'room_count': 0, 'annotation_count': 0, ...}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 6,
+      "text": "PASS scene_semantic_counts_reported objects=9 rooms=0"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 7,
+      "text": "artifact {\"artifact_size\": 657965056, \"base\": \"/home/wheatfox/actions-runner-robonix-temp/_work/_temp/robonix-ci-29468797291/mapping-maps/ci_scene_map_29468797291\", ...}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 8,
+      "text": "PASS artifact_directory_exists /home/wheatfox/actions-runner-robonix-temp/_work/_temp/robonix-ci-29468797291/mapping-maps/ci_scene_map_29468797291"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 9,
+      "text": "PASS artifact_sqlite_exists ['meta.yaml', 'occupancy.pgm', 'occupancy.png', 'occupancy.yaml', 'rtabmap.db']"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 10,
+      "text": "PASS artifact_quick_check_ok ok"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 11,
+      "text": "PASS artifact_size_nontrivial 657965056"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 12,
+      "text": "PASS artifact_nodes_nontrivial {'Node': 679, 'Data': 679, 'Link': 698, 'Word': 33128}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 13,
+      "text": "PASS preview_exists ['meta.yaml', 'occupancy.pgm', 'occupancy.png', 'occupancy.yaml', 'rtabmap.db']"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 14,
+      "text": "load_response {\"detail\": \"loaded immutable map ci_scene_map_29468797291 via runtime copy; published optimized global map; verified target occupancy on /map (173x220, sha256=c3aee2172dc1); elapsed=5.1s\", \"objects_flushed\": 10, \"objects_restored\": 9, \"occupancy\": {\"count\": 96, \"height\": 220, \"stamp_unix\": 1784172522.1295483, \"width\": 173}, \"ok\": true, \"snapshot_partition\": \"ci_scene_map_29468797291__s1\"}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 15,
+      "text": "PASS scene_load_ok loaded immutable map ci_scene_map_29468797291 via runtime copy; published optimized global map; verified target occupancy on /map (173x220, sha256=c3aee2172dc1); elapsed=5.1s"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 16,
+      "text": "live_map {\"frame_id\": \"map\", \"free\": 10348, \"height\": 220, \"known\": 11588, \"occupied\": 1240, \"origin_x\": -5.85891056060791, \"origin_y\": -5.473966121673584, \"resolution\": 0.05000000074505806, \"unknown\": 26472, \"width\": 173}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 17,
+      "text": "PASS live_map_known_cells {'width': 173, 'height': 220, 'resolution': 0.05000000074505806, 'known': 11588, 'occupied': 1240, 'free': 10348, 'unknown': 26472, 'frame_id': 'map', 'origin_x': -5.85891056060791, 'origin_y': -5.473966121673584}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 18,
+      "text": "PASS preview_matches_meta meta=173x220 preview=173x220"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 19,
+      "text": "PASS loaded_map_dimensions_match_saved_meta meta=173x220 live=173x220"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 20,
+      "text": "PASS loaded_map_origin_matches_saved_meta dx=0.0000 dy=0.0000 meta=(-5.85891056060791, -5.473966121673584) live=(-5.85891056060791,-5.473966121673584)"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 21,
+      "text": "delete_response {\"detail\": \"deleted ci_scene_map_29468797291\", \"map_id\": \"ci_scene_map_29468797291\", \"ok\": true, \"scene_cleanup\": {\"annotations_deleted\": true, \"objects_deleted\": 9}}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 22,
+      "text": "PASS delete_after_ok {'ok': True, 'map_id': 'ci_scene_map_29468797291', 'detail': 'deleted ci_scene_map_29468797291', 'scene_cleanup': {'annotations_deleted': True, 'objects_deleted': 9}}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 23,
+      "text": "summary: 16/16 checks passed"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the scene-graph LLM enrichment warnings (JSONDecodeError from fake-vlm) — they are expected with the mock VLM and do not affect test outcomes. The scene map persistence test (16/16 checks) confirms the epoch-safe Save/Load/Delete works correctly.",
+  "risks_or_watchouts": [
+    "Scene-graph LLM enrichment repeatedly fails with JSONDecodeError from fake-vlm — expected with mock, but a real VLM deployment must return valid JSON.",
+    "The lifecycle watcher's epoch response (flush + stale marking) is best-effort; a failure in _flush_registry or anno_store.mark_all_stale is logged but does not crash the watcher. Operators should monitor logs for these errors.",
+    "The legacy SCENE_RESTORE_ON_START mode is explicitly documented as incompatible with map-UI Saves — a Save purges the bare partition the legacy restore reads. Ensure operators understand this trade-off.",
+    "The scene map persistence test uses a fake object store (FakeObjectStore) — real milvus-lite behavior may differ under load or with concurrent access.",
+    "The nav2 velocity_guard shutdown traceback (RCLError: invalid context) is a known ROS2 shutdown race and does not affect test results."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-16T03:33:15+00:00"
+}

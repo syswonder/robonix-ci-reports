@@ -1,0 +1,47 @@
+{
+  "title": "All 15 Webots integration scenarios passed",
+  "stage": "success",
+  "summary": "This CI run tested the merged PR #169 (harden dev Webots runner isolation) on the dev branch. All 15 scenarios across builtin, cap, and flow families passed with a 100% pass rate. The changes include concurrency group locking, GPU capacity waiting, RUN_KEY-based isolation, voiceprint CPU device, and improved map persistence verification.",
+  "pr_changes": [
+    "Added concurrency group and cancel-in-progress: false to gpu_testing job",
+    "Added RUN_ATTEMPT and RUN_KEY environment variables for per-run isolation",
+    "Added ROBONIX_CI_MIN_GPU_FREE_MIB variable and a step to wait for GPU capacity",
+    "Set VOICEPRINT_DEVICE=cpu to keep ECAPA verification off the GPU",
+    "Replaced RUN_ID with RUN_KEY in container names, runtime directories, and map IDs",
+    "Removed hardcoded ROBONIX_SIM_CONTAINER env overrides in restart and capture steps",
+    "Added a dedicated step to clean the runner-local run directory after the job",
+    "Updated testing/README.md to document new map persistence checks",
+    "Enhanced testing/simulate_ci.py to handle regex assertions and synthetic text generation",
+    "Enhanced testing/verify_scene_map_persistence.py to check fresh occupancy and report dimension differences as warnings"
+  ],
+  "test_result": "Webots CI exercised 15 scenarios (4 builtin, 8 cap, 3 flow) covering file operations, plan control, camera/lidar snapshots, explore, mapping, memory, scene, speech, voiceprint, fault recovery, object navigation, and patrol observe. All passed. The map persistence verification (scene-map-persistence.txt) passed 16/16 checks including fresh occupancy and dimension matching.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 0,
+      "text": "summary: 16/16 checks passed"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the new GPU capacity waiting step for timeout issues on busy runners. Watch for any regressions in map dimension reporting due to the new diagnostic warnings.",
+  "risks_or_watchouts": [
+    "The new GPU capacity waiting step may timeout if the runner GPU is persistently busy",
+    "The map persistence script now reports dimension differences as WARN instead of FAIL; ensure this does not mask real regressions",
+    "The voiceprint CPU device change may affect performance of enrollment/identification in CI"
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-21T05:23:01+00:00"
+}

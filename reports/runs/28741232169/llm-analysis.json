@@ -1,0 +1,66 @@
+{
+  "title": "All 15 scenarios passed — VLM-primary scene graph + stable object identity",
+  "stage": "success",
+  "summary": "All 15 CI scenarios passed (15/15, 100%). The PR introduces a VLM-primary scene graph where an image-grounded VLM call owns relational/semantic edges, while a fast geometric loop (3 Hz) handles only reachable_by. Object identity is stabilized via cross-tick re-bind, soft eviction with TTL, and new merge passes (same-class proximity, cross-class geometric collapse, configurable class groups). The pilot's RTDL parser now tolerates prose preamble around JSON. The scene-graph LLM enrichment ran but all VLM calls to the fake-vlm endpoint returned empty JSON, so no semantic edges were produced; the geometric loop and object registry functioned correctly.",
+  "pr_changes": [
+    "system/pilot/src/planner.rs: Added extract_json_object() to strip prose preamble before JSON parsing; updated RTDL_PROTOCOL_REMINDER and retry prompt to require JSON-only replies; added unit tests for prose tolerance and JSON extraction.",
+    "system/scene/README.md: Documented VLM-primary scene graph, new env knobs (SCENE_CG_OBJ_MIN_POINTS, SCENE_CG_SAME_CLASS_MERGE_DIST_M, SCENE_CG_MERGE_CLASS_GROUPS, SCENE_OBJECT_TTL_SEC, SCENE_GRAPH_IMAGE_RELATIONS, VLM_REASONING_EFFORT), and troubleshooting for ghosting/label flicker.",
+    "system/scene/scene_service/ingest/perception_concept_graphs.py: Added same-class proximity merge, cross-class geometric collapse, configurable merge/identity gates via env, cross-tick re-bind in _apply_snapshot, soft eviction with TTL, and SCENE_CG_MERGE_CLASS_GROUPS parsing.",
+    "system/scene/scene_service/ingest/perception_vlm.py: Added VLM_REASONING_EFFORT env support forwarded to VLM request body.",
+    "system/scene/scene_service/scene_graph/builder.py: Added image-grounded relation dispatch (ImageRelationInferer), transient-blip guard preserving edges when <2 stable nodes, and split semantic/geometric edge storage.",
+    "system/scene/scene_service/scene_graph/geometric_loop.py: New file — fast 3 Hz loop producing reachable_by edges with debounce hysteresis.",
+    "system/scene/scene_service/scene_graph/geometry.py: New file — deterministic geometric predicates (on_top_of, under, inside, contains, near) and jitter-stable geometry signature for cache invalidation.",
+    "system/scene/scene_service/scene_graph/image_relations.py: New file — image-grounded VLM relation inference: projection, frame annotation, prompt, parsing.",
+    "system/scene/scene_service/scene_graph/llm_client.py: Added reasoning_effort support, multimodal image content in chat_json, and improved timeout logging.",
+    "system/scene/scene_service/scene_graph/prompts.py: Added SEMANTIC_RELATION_SYSTEM_PROMPT and build_semantic_relation_user_prompt for semantic-only inference.",
+    "system/scene/scene_service/scene_graph/relations.py: Added _normalize_relation, infer_semantic_relation, increased LLM timeout to 60s.",
+    "system/scene/scene_service/scene_graph/store.py: Split into geometric and semantic slices; added geometry-signature-based cache key, prune_relations, and compose get_snapshot.",
+    "system/scene/scene_service/scene_graph/types.py: Added reachable_by to RELATION_TYPES, geometric method to SceneGraphEdge.",
+    "system/scene/scene_service/service.py: Replaced RelationEngine with GeometricRelationLoop; wired scene-graph store and perception into builder.",
+    "system/scene/scene_service/state/__init__.py: Removed RelationEngine export.",
+    "system/scene/scene_service/state/object_registry.py: Added find_rebindable, soft_evict, prune_expired for cross-tick re-bind.",
+    "system/scene/scene_service/state/relations.py: Removed (replaced by geometric loop + image relations).",
+    "system/scene/scene_service/web.py: Removed on-canvas edge drawing; added explicit relation list in info panel.",
+    "system/scene/scripts/start.sh: Added env passthrough for new scene-graph knobs.",
+    "system/scene/tests/test_identity.py: New file — unit tests for find_rebindable, soft_evict, prune_expired, parse_merge_class_groups, cross-tick re-bind, TTL prune.",
+    "system/scene/tests/test_image_relations.py: New file — unit tests for projection, parsing, annotation, multimodal body, builder dispatch, transient-blip guard.",
+    "system/scene/tests/test_persistence.py: Added _object_ttl_s and _merge_class_group to detector stub.",
+    "system/scene/tests/test_scene_graph.py: Added tests for geometric_relation, compute_geometric_edges, geometry_signature, cache invalidation, store compose, debounce, infer_semantic_relation, normalize_relation, reasoning_effort, prune_relations."
+  ],
+  "test_result": "15 scenarios across builtin, cap, and flow families all passed. Builtin tests exercised file I/O, plan control, and command execution. Cap tests exercised camera/lidar snapshots, explore (timeout), map save, memory roundtrip, scene object listing, speech, and voiceprint. Flow tests exercised fault recovery (memory save), object navigation (explore → list objects → goal_near → navigate), and patrol observe (parallel camera/lidar → memory save → search). The scene-graph LLM enrichment ran but all VLM calls to the fake-vlm endpoint returned empty JSON, so no semantic edges were produced; the geometric loop and object registry functioned correctly.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/sim-logs/ci-28741232169-scene.stdout.log",
+      "line": 250,
+      "text": "07-05 12:53:21.820  W scene                    [scene-graph-llm] request failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    },
+    {
+      "source": "dl/_temp/sim-logs/ci-28741232169-scene.stdout.log",
+      "line": 4,
+      "text": "failed — persistence OFF for this"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-state-readiness.json",
+      "line": 1,
+      "text": "{\"objects\":[{\"id\":\"scene.object.potted_plant_001\",\"short_id\":\"potted_plant_001\",\"cls\":\"potted_plant\",\"pose\":{\"x\":1.3788100595234163,\"y\":0.18861834707415223,\"z\":0.9535420492940094,\"yaw\":0.09825888521080683},\"bbox\":{\"size_x\":0.49310681558660924,\"size_y\":0.34721167011339704,\"size_z\":0.687749185640638,\"yaw\":0.09825888521080683},\"confidence\":0.688478285266507,\"observation_count\":34,\"missing\":false},{\"id\":\"scene.object.robot_001\",\"short_id\":\"robot_001\",\"cls\":\"robot\",\"pose\":{\"x\":4.724330421092038e-10,\"y\":1.970265666254972e-15,\"z\":0.0,\"yaw\":5.259165653058311e-07},\"bbox\":{\"size_x\":0.6,\"size_y\":0.6,\"size_z\":1.5,\"yaw\":0.0},\"confidence\":1.0,\"observation_count\":21,\"missing\":false}],\"relations\":[],\"scene_graph\":{\"edges\":[],\"updated_at\":1783255896.606643},\"robot\":{\"x\":4.724330421092038e-10,\"y\":1.970265666254972e-15,\"z\":0.0,\"yaw\":5.259165653058311e-07},\"occupancy\":{\"width\":66,\"height\":51,\"resolution\":0.05000000074505806,\"origin_x\":-0.5249999761581421,\"origin_y\":-1.1249991655349731,\"stamp_ms\":178325589"
+    }
+  ],
+  "suggested_fix": "No fix needed. The fake-vlm endpoint returns empty JSON, which is expected in CI without real VLM credentials. The scene-graph LLM enrichment correctly degrades to no semantic edges. If real VLM inference is desired, set VLM_BASE_URL/VLM_API_KEY/VLM_MODEL to a working endpoint.",
+  "risks_or_watchouts": [
+    "Scene-graph LLM enrichment produced no semantic edges because the fake-vlm endpoint returns empty JSON; this is expected in CI but means the VLM-primary path is untested end-to-end.",
+    "Object memory persistence failed (No module named 'pymilvus'), so warm-restore across restarts is disabled; this does not affect the current test run.",
+    "The explore skill's first attempt (5s timeout) waited for map→base_link tf and timed out without moving; the second attempt (8s timeout) successfully drove to a frontier and swept, then timed out. This is expected behavior for a bounded exploration test.",
+    "The scene-graph builder's transient-blip guard preserved edges when all objects went missing, but since no edges were ever produced, this path was not exercised."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-05T12:55:20+00:00"
+}

@@ -1,0 +1,70 @@
+{
+  "title": "All 15 scenarios passed — provider bind host feature merged",
+  "stage": "success",
+  "summary": "All 15 Webots integration scenarios passed (15/15, 100%). The PR #151 adds a `ROBONIX_PROVIDER_BIND_HOST` environment variable to allow providers to bind to loopback (127.0.0.1) instead of the default 0.0.0.0, with automatic advertise host fallback and MCP DNS-rebinding protection enabled for loopback binds. The CI exercised builtin, capability, and flow scenarios including fault recovery, file roundtrip, plan control, camera/lidar snapshots, explore, mapping, memory, scene object listing, speech, voiceprint, object navigation, and patrol observe.",
+  "pr_changes": [
+    "Added `_provider_bind_host()` function in `capability.py` that reads `ROBONIX_PROVIDER_BIND_HOST` env var (defaults to '0.0.0.0') and validates it is an IPv4 address literal.",
+    "Modified `_advertise_host()` to return the non-wildcard bind host automatically when no explicit `ROBONIX_ADVERTISE_HOST` is set, so loopback bind advertises loopback.",
+    "Changed `_ensure_mcp_app()` to use `self._bind_host` and conditionally enable DNS-rebinding protection only when bind host is loopback.",
+    "Changed lifecycle gRPC server bind from `[::]:0` to `f\"{self._bind_host}:0\"` with a runtime error if port 0 is returned.",
+    "Changed MCP server socket bind from `('0.0.0.0', 0)` to `(self._bind_host, 0)`.",
+    "Updated log messages to reflect the actual bind host instead of hardcoded '0.0.0.0'.",
+    "Added unit tests in `test_provider_bind_host.py` covering default, loopback normalization, rejection of invalid values, loopback advertise without route probe, explicit advertise override, and static source-code assertions.",
+    "Updated `README.md` with documentation for `ROBONIX_PROVIDER_BIND_HOST` and `ROBONIX_ADVERTISE_HOST` environment variables."
+  ],
+  "test_result": "The CI ran 15 scenarios across builtin, cap, and flow families. All passed. Builtin scenarios tested file operations, plan control, and command execution. Cap scenarios tested camera snapshot, lidar snapshot, explore smoke test, map save, memory roundtrip, scene object listing, speech, and voiceprint list. Flow scenarios tested fault recovery (memory save with invalid args), object navigation (explore → list objects → goal_near → navigate), and patrol observe (parallel camera/lidar → memory save → memory search). The CI also performed a restart cycle (lifecycle-boot-2.log) which also passed all 15 scenarios.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "pylib/robonix-api/robonix_api/capability.py",
+      "line": 72,
+      "text": "def _provider_bind_host(value: str | None = None) -> str:"
+    },
+    {
+      "source": "pylib/robonix-api/robonix_api/capability.py",
+      "line": 443,
+      "text": "if not ipaddress.ip_address(self._bind_host).is_unspecified:"
+    },
+    {
+      "source": "pylib/robonix-api/robonix_api/capability.py",
+      "line": 565,
+      "text": "protect_loopback = ipaddress.ip_address(self._bind_host).is_loopback"
+    },
+    {
+      "source": "pylib/robonix-api/robonix_api/capability.py",
+      "line": 737,
+      "text": "self._driver_port = server.add_insecure_port(f\"{self._bind_host}:0\")"
+    },
+    {
+      "source": "pylib/robonix-api/robonix_api/capability.py",
+      "line": 803,
+      "text": "s.bind((self._bind_host, 0))"
+    },
+    {
+      "source": "pylib/robonix-api/tests/test_provider_bind_host.py",
+      "line": 1,
+      "text": "class ProviderBindHostTest(unittest.TestCase):"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the scene-graph-llm JSONDecodeError warnings in scene logs — they indicate the fake-vlm endpoint returns empty responses, which is expected for CI but may need attention if real VLM integration is used.",
+  "risks_or_watchouts": [
+    "The scene-graph-llm repeatedly logs JSONDecodeError warnings because the fake-vlm endpoint returns empty responses; this is harmless in CI but could mask real VLM issues in production.",
+    "The rtabmap_viz container logs 'failed to create drawable' due to missing GPU/display — this is expected in headless CI and does not affect mapping functionality.",
+    "The new provider bind host feature changes default behavior only when `ROBONIX_PROVIDER_BIND_HOST` is set; existing deployments using 0.0.0.0 are unaffected."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-17T03:00:48+00:00"
+}

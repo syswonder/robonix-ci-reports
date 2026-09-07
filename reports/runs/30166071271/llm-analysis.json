@@ -1,0 +1,9 @@
+{
+  "available": false,
+  "title": "LLM analysis failed",
+  "summary": "HTTP Error 400: Bad Request",
+  "confidence": "low",
+  "generated_on": "2026-07-25T19:41:28+00:00",
+  "provider": "deepseek",
+  "model": "deepseek-chat"
+}
