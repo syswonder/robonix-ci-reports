@@ -1,0 +1,60 @@
+{
+  "title": "CI infrastructure failure: sim container unavailable",
+  "stage": "unknown",
+  "summary": "The CI run for PR #116 (VLM-primary scene graph + stable object identity) could not start any simulation containers. All Docker containers (sim, explore, mapping, nav2, scene) report 'No such container' errors, and the sim container image query also fails. The report summary shows 'NO DATA' with 0/0 scenarios executed. The code changes themselves are extensive and well-structured, but the CI infrastructure issue prevented any testing.",
+  "pr_changes": [
+    "system/pilot/src/planner.rs: Added extract_json_object helper to tolerate prose preamble around JSON in RTDL responses; updated parse_rtdl_assistant_response to use it; added unit tests.",
+    "system/scene/README.md: Documented new scene_graph/ directory, VLM-primary relations, and many new environment variables for merge/identity tuning.",
+    "system/scene/scene_service/ingest/perception_concept_graphs.py: Major rework: cross-tick re-bind via soft eviction (SCENE_OBJECT_TTL_SEC), same-class proximity collapse, merge class groups, frame bundle export, and many new config knobs.",
+    "system/scene/scene_service/ingest/perception_vlm.py: Added VLM_REASONING_EFFORT support.",
+    "system/scene/scene_service/scene_graph/builder.py: Added image-grounded relation path via ImageRelationInferer; transient-blip guard preserves edges when <2 stable nodes; refactored relation inference into _maybe_image_edges and _infer_text_edges.",
+    "system/scene/scene_service/scene_graph/geometric_loop.py: New file: fast geometric loop producing reachable_by edges with debounce hysteresis.",
+    "system/scene/scene_service/scene_graph/geometry.py: New file: deterministic geometric predicates (on_top_of, under, inside, contains) and geometry signature for cache invalidation.",
+    "system/scene/scene_service/scene_graph/image_relations.py: New file: image-grounded VLM relation inference with projection, annotation, and parsing.",
+    "system/scene/scene_service/scene_graph/llm_client.py: Added reasoning_effort and multimodal image support to chat_json.",
+    "system/scene/scene_service/scene_graph/prompts.py: Added semantic-only relation prompt and helper functions.",
+    "system/scene/scene_service/scene_graph/relations.py: Added infer_semantic_relation, _normalize_relation, increased timeout to 60s.",
+    "system/scene/scene_service/scene_graph/store.py: Refactored to two-slice store (geometric + semantic), added prune_relations, geometry-signature-based cache keys.",
+    "system/scene/scene_service/scene_graph/types.py: Added reachable_by to RELATION_TYPES.",
+    "system/scene/scene_service/service.py: Wired geometric loop and scene graph store; removed old RelationEngine; passed perception to builder.",
+    "system/scene/scene_service/state/__init__.py: Removed RelationEngine exports.",
+    "system/scene/scene_service/state/object_registry.py: Added find_rebindable, soft_evict, prune_expired for cross-tick identity stability.",
+    "system/scene/scene_service/state/relations.py: Removed (replaced by geometric loop + scene graph).",
+    "system/scene/scene_service/web.py: Updated state payload to use geometric edges; added relation list to info panel.",
+    "system/scene/scripts/start.sh: Added env var passthrough for new merge/identity knobs.",
+    "system/scene/tests/test_identity.py: New file: unit tests for object identity stability.",
+    "system/scene/tests/test_image_relations.py: New file: unit tests for image-grounded relation pass.",
+    "system/scene/tests/test_persistence.py: Updated test helper with new attributes.",
+    "system/scene/tests/test_scene_graph.py: Added many new tests for geometry, cache invalidation, store composition, debounce, semantic inference, normalization, reasoning_effort, prune_relations."
+  ],
+  "test_result": "No Webots scenarios were executed because the simulation container (ci-28740374466-sim) could not be found. All dependent containers (explore, mapping, nav2, scene) also report 'No such container'. The report summary shows 'NO DATA' with 0/0 scenarios.",
+  "likely_root_cause": "The simulation container was not created or was removed before the CI could inspect it. This is likely a CI infrastructure issue (e.g., Docker daemon restart, container naming mismatch, or a previous step failing to start the container).",
+  "evidence": [
+    {
+      "source": "dl/_temp/sim-logs/sim-container-image.txt",
+      "line": 2,
+      "text": "error: no such object: ci-28740374466-sim"
+    },
+    {
+      "source": "dl/_temp/sim-logs/webots.stdout.log",
+      "line": 1,
+      "text": "Error response from daemon: No such container: ci-28740374466-sim"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/report/summary.md",
+      "line": 3,
+      "text": "**Result:** `NO DATA`"
+    }
+  ],
+  "suggested_fix": "Investigate CI pipeline: ensure the sim container is started before the inspection step, and that container names match between creation and inspection. Check Docker daemon logs for errors. Consider adding a retry or health check for container startup.",
+  "risks_or_watchouts": [
+    "CI infrastructure flakiness prevents testing of code changes; no functional validation occurred.",
+    "The code changes are large and touch many files; without CI testing, regressions may go undetected.",
+    "The new VLM-primary scene graph and object identity logic depend on external VLM services; ensure those are available in CI."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-05T12:15:48+00:00"
+}

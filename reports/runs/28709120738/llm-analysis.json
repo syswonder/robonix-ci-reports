@@ -1,0 +1,51 @@
+{
+  "title": "Soma subsystem boot: stage 2 skill failure (explore missing manifest)",
+  "stage": "scenario",
+  "summary": "This CI run tested the new Soma subsystem (PR #109) on the Webots TIAGo deployment. All 11 system components booted successfully, including the new `robonix-soma` service which loaded the robot's YAML/URDF and spawned 4 primitives (tiago_chassis, tiago_camera, tiago_lidar, audio_driver) in stage 1. Stage 2 skill bring-up failed because the `explore` skill package's `package_manifest.yaml` was missing from the cache directory. The boot log shows `[FAIL] skill explore: missing .../rbnx-boot/cache/explore/package_manifest.yaml`. All other services (pilot, liaison, scene, memory, speech, voiceprint, mapping, nav2) registered and became ACTIVE. The CI scenario ran for about 10 minutes before shutdown.",
+  "pr_changes": [
+    "Added new `robonix-soma` crate under `system/soma/` with gRPC services for get_yaml and get_urdf, plus two-stage primitive/skill bring-up via `PackageLauncher`.",
+    "Added `system/pilot/src/soma_context.rs` to fetch Soma YAML/URDF at Pilot startup and inject into the system prompt.",
+    "Modified `system/pilot/src/main.rs`, `planner.rs`, and `service.rs` to pass the Soma prompt block through the planning loop.",
+    "Added `capabilities/lib/soma/srv/GetUrdf.srv` and `GetYaml.srv` IDL files, plus `capabilities/system/soma/get_urdf.v1.toml` and `get_yaml.v1.toml` contract definitions.",
+    "Added example Soma YAML files: `examples/test_ci/soma.yaml`, `examples/test_ci/test_ci.urdf`, and `examples/webots/soma.yaml`.",
+    "Modified `tools/rbnx/src/cmd/deploy.rs` to spawn soma with a stage-2 trigger pipe, auto-inject `robot_yaml`, and wait for stage 1 completion.",
+    "Added `tools/rbnx/src/launch.rs` with shared lifecycle primitives (`wait_for_registration_core`, `call_driver_cmd`, etc.) used by both rbnx and Soma.",
+    "Updated `Cargo.toml`, `Makefile`, `Cargo.lock`, `system/atlas/Cargo.toml`, `tools/rbnx/Cargo.toml`, `tools/rbnx/src/lib.rs`, `tools/rbnx/src/process.rs`, `tools/rbnx/src/cmd/clean.rs`, `tools/rbnx/src/cmd/run_package.rs`, and `system/atlas/src/service.rs` to integrate the new soma component.",
+    "Updated `system/soma/README.md` with full documentation of the Soma v2 config, API, and YAML spec."
+  ],
+  "test_result": "Webots CI booted the full stack (atlas, executor, soma, pilot, liaison, scene, memory, speech, voiceprint, mapping, nav2) against a simulated TIAGo robot. Soma stage 1 spawned 4 primitives successfully. Stage 2 failed to start the `explore` skill because its package manifest was missing from the cache. The simulation ran for ~10 minutes with all other services ACTIVE before shutdown.",
+  "likely_root_cause": "The `explore` skill package was not built/cached before boot. The manifest references a `url:` entry for `explore`, but `rbnx build` was not run (or the cache was cleaned), so `rbnx-boot/cache/explore/package_manifest.yaml` does not exist. Soma correctly reports `MissingManifest` and continues.",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/examples/webots/logs/soma.log",
+      "line": 18,
+      "text": "{\"ts\":\"2026-07-04 22:34:59.185827490\",\"level\":\"info\",\"tag\":\"soma\",\"msg\":\"  [FAIL] skill explore: missing /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/explore/package_manifest.yaml\"}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/ci-28709120738-explore.inspect.json",
+      "line": 2,
+      "text": "error: no such object: ci-28709120738-explore"
+    },
+    {
+      "source": "dl/_temp/sim-logs/ci-28709120738-explore.stdout.log",
+      "line": 1,
+      "text": "Error response from daemon: No such container: ci-28709120738-explore"
+    },
+    {
+      "source": "dl/robonix/robonix/examples/webots/rbnx-boot/logs/soma.log",
+      "line": 18,
+      "text": "{\"ts\":\"2026-07-04 22:34:59.185582909\",\"level\":\"warn\",\"tag\":\"soma\",\"msg\":\"stage 2 finished with one or more skill failures (see report)\"}"
+    }
+  ],
+  "suggested_fix": "Run `rbnx build` (or the equivalent CI step) before boot to ensure all remote skill packages are cloned and their manifests are present in the cache directory. Alternatively, remove the `explore` skill entry from the manifest if it is not needed for this test.",
+  "risks_or_watchouts": [
+    "Stage 2 skill failures are non-fatal (soma continues), but operators may not notice the missing skill if they only check the boot summary.",
+    "The `explore` skill's `package_manifest.yaml` is missing because the cache was not populated; this is a CI pipeline issue, not a code bug.",
+    "The Soma subsystem's two-stage bring-up is working correctly: stage 1 primitives all ACTIVE, stage 2 reports failure gracefully."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-04T14:44:53+00:00"
+}

@@ -1,0 +1,48 @@
+{
+  "title": "All 15 scenarios passed — plan-control builtins verified",
+  "stage": "success",
+  "summary": "This CI run tested the new `stop_plan_at`, `get_plan_status`, and `get_all_plans` executor builtins, along with existing capabilities and flows. All 15 scenarios passed (100% rate). The new plan-control builtins were exercised in the `plan_control_builtins` scenario, which successfully listed active plans, inspected a plan's status, armed a stop point, and verified the stop point was recorded. No regressions were observed in existing functionality.",
+  "pr_changes": [
+    "Added `get_all_plans`, `get_plan_status`, and `stop_plan_at` builtin ops to the executor, including their MCP capability declarations and dispatch logic.",
+    "Implemented `stop_plan_at_builtin`, `get_plan_status_builtin`, and `get_all_plans_builtin` methods in `plan_runtime.rs`, with stop-point recording, op-state tracking, and plan metadata snapshotting.",
+    "Integrated stop-point checks (`should_stop_at`) and stop-point triggering (`trigger_stop`) into the execution loop in `service.rs`, supporting both `on_enter` and `on_complete` phases.",
+    "Updated the pilot planner to recognize the new builtins as control-only operations (not cancellable task trees) and to include instructions for using them in the in-flight trees system prompt.",
+    "Added a new test scenario `plan_control_builtins` and updated the executor README with documentation for the three new builtins.",
+    "Added unit tests for `stop_plan_at`, `get_plan_status`, `get_all_plans`, `is_control_only`, and `send_stop_on_enter`."
+  ],
+  "test_result": "Webots CI ran 15 scenarios across builtin, cap, and flow families. All passed. The new `plan_control_builtins` scenario verified: `get_all_plans` returned 1 plan with plan_id '1', `get_plan_status` returned the plan's ops with live states, `stop_plan_at` armed a stop point on op_id '1' with `on_complete`, and a subsequent `get_all_plans` confirmed `stop_points` incremented to 1. Existing scenarios (fault recovery, file roundtrip, run_command, camera/lidar snapshots, explore, mapping, memory, scene, speech, voiceprint, object navigation, patrol observe) all passed without issues.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "summary.json",
+      "line": 54,
+      "text": "\"id\": \"missing_read\","
+    },
+    {
+      "source": "summary.json",
+      "line": 650,
+      "text": "\"timeout_s\": 5.0,"
+    },
+    {
+      "source": "summary.json",
+      "line": 1293,
+      "text": "\"error\": \"mcp tool error: Error executing tool save: 1 validation error for saveArguments\\ndata\\n  Field required [type=missing, input_value={}, input_type=dict]\""
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the fake-VLM scene-graph-LLM failures (Expecting value errors) in future runs — they are non-fatal but indicate the fake VLM returns empty responses for relation extraction, which may affect scene graph quality.",
+  "risks_or_watchouts": [
+    "Scene graph LLM requests to fake-vlm consistently return empty responses (Expecting value errors), which may degrade scene relation extraction if a real VLM is used later.",
+    "The `stop_plan_at` builtin was tested only on a plan that arms a stop point on itself — testing on plans with external async calls would provide more coverage.",
+    "The `voiceprint_list` scenario returned 'db not initialised' — this is expected in CI but should be monitored for regressions."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-03T12:21:14+00:00"
+}

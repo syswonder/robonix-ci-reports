@@ -1,0 +1,49 @@
+{
+  "title": "All 15 scenarios passed — hand primitive contracts added",
+  "stage": "success",
+  "summary": "This PR adds IDL message and service definitions for dexterous hand primitives, along with contract TOML files for driver, info, move_joint, set_speed_limits, set_torque_limits, state_joint, and state_speed. The CI ran 15 scenarios covering builtin, capability, and flow tests, all passing. The new hand contracts were not exercised by any existing test, so they remain untested in simulation.",
+  "pr_changes": [
+    "Added capabilities/lib/hand/msg/JointState.msg (float64[] values)",
+    "Added capabilities/lib/hand/srv/GetHandInfo.srv (returns joint_names, model, num_joints)",
+    "Added capabilities/lib/hand/srv/MoveJoint.srv (joint_names + positions → ok, message)",
+    "Added capabilities/lib/hand/srv/SetSpeedLimits.srv (limits → ok)",
+    "Added capabilities/lib/hand/srv/SetTorqueLimits.srv (limits → ok)",
+    "Added capabilities/primitive/hand/driver.v1.toml (lifecycle entry point)",
+    "Added capabilities/primitive/hand/info.v1.toml (hand metadata query)",
+    "Added capabilities/primitive/hand/move_joint.v1.toml (set joint positions)",
+    "Added capabilities/primitive/hand/set_speed_limits.v1.toml (speed limits per joint)",
+    "Added capabilities/primitive/hand/set_torque_limits.v1.toml (torque limits per joint)",
+    "Added capabilities/primitive/hand/state_joint.v1.toml (continuous joint position topic)",
+    "Added capabilities/primitive/hand/state_speed.v1.toml (continuous joint speed topic)"
+  ],
+  "test_result": "All 15 scenarios passed (15/15, 100%). Coverage includes builtin file/plan/command operations, camera/lidar snapshots, explore smoke test, mapping save, memory roundtrip, scene object listing, speech speak, voiceprint list, fault recovery flows, object navigation, and patrol observe. The new hand primitives were not covered by any scenario.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "summary.json",
+      "line": 2,
+      "text": "\"total\": 15,"
+    },
+    {
+      "source": "summary.json",
+      "line": 4,
+      "text": "\"rate\": 1.0,"
+    }
+  ],
+  "suggested_fix": "Add a hand-specific scenario (e.g., hand_info, hand_move_joint) to the CI test suite to validate the new contracts end-to-end.",
+  "risks_or_watchouts": [
+    "Hand primitive contracts are defined but not tested — any runtime issues will only surface when a hand driver is integrated.",
+    "The scene LLM enrichment repeatedly failed with JSONDecodeError (fake-vlm returns empty body), but this did not affect test pass/fail.",
+    "Voiceprint list returned 'db not initialised' — expected in CI but may mask future regressions."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-06T01:55:20+00:00"
+}

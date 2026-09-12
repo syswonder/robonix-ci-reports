@@ -1,0 +1,40 @@
+{
+  "title": "All 15 Webots integration scenarios passed",
+  "stage": "success",
+  "summary": "This CI run tested the PR 'ci: harden dev Webots runner isolation' which modifies the CI workflow to use a RUN_KEY (run_id-run_attempt) for per-run resource naming, adds GPU capacity waiting, sets VOICEPRINT_DEVICE=cpu, and adds a runner-local cleanup step. All 15 scenarios (builtin, cap, flow) passed, including fault recovery, file roundtrip, plan control, camera/lidar snapshots, explore smoke, mapping save, memory roundtrip, scene object listing, speech, voiceprint, and multi-step flows. The scene map persistence verification also passed 16/16 checks.",
+  "pr_changes": [
+    "Modified .github/workflows/testing.yml: added concurrency group for GPU testing, added RUN_ATTEMPT and RUN_KEY env vars, added ROBONIX_CI_MIN_GPU_FREE_MIB variable, set VOICEPRINT_DEVICE=cpu, removed ROBONIX_HOME env, added 'Wait for runner GPU capacity' step, changed runtime_dir and container names to use RUN_KEY, added 'Clean runner-local run directory' step, updated various docker commands to use RUN_KEY.",
+    "Modified testing/simulate_ci.py: improved synthetic_text_for_regex to handle regex patterns with \\s, \\d, .* and escaped characters; added handling for 'regex' assertion op in _satisfy_check.",
+    "Modified testing/verify_scene_map_persistence.py: added --dimension-tolerance-cells argument (default 2) and used it to allow small drift in occupancy grid dimensions during save/load verification."
+  ],
+  "test_result": "All 15 scenarios passed (15/15, 100%). Coverage includes 20 capabilities across builtin, cap, and flow families. Scene map persistence verification passed 16/16 checks. The explore skill timed out as expected (5.0s and 8.0s ceilings). Navigation goals succeeded. Memory save/search roundtripped correctly. Camera and lidar snapshots returned valid data.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "scene-map-persistence.txt",
+      "line": 0,
+      "text": "summary: 16/16 checks passed"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the new GPU capacity waiting step and runner-local cleanup for any future timeout or permission issues.",
+  "risks_or_watchouts": [
+    "The new GPU capacity waiting step may increase CI duration if GPU is busy.",
+    "The VOICEPRINT_DEVICE=cpu change may affect voiceprint performance in CI.",
+    "The dimension tolerance in map persistence verification may mask subtle map changes."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-21T03:45:56+00:00"
+}

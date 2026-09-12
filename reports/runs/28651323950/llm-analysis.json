@@ -1,0 +1,40 @@
+{
+  "title": "plan_control_builtins test fails due to op_id mismatch",
+  "stage": "scenario",
+  "summary": "The CI run tested 15 scenarios; 14 passed and 1 failed. The failing scenario is 'plan_control_builtins', which exercises the new executor builtins `get_all_plans`, `get_plan_status`, and `stop_plan_at`. The test expected the plan's ops to have op_id '1', but the actual plan assigned op_ids '16', '17', '18', '19'. This indicates a mismatch between the test fixture's assumption about op_id numbering and the executor's actual op_id assignment logic.",
+  "pr_changes": [
+    "Added three new executor builtins: get_all_plans, get_plan_status, stop_plan_at",
+    "Added plan_control_builtins test scenario in testing/scenarios/builtin/plan_control.yaml",
+    "Modified plan_runtime.rs to support stop points, op state recording, and plan inspection",
+    "Modified service.rs to check stop points during node execution and record op states",
+    "Modified builtin.rs to route the three new builtins to runtime methods",
+    "Modified async_poll.rs to record async op state for get_plan_status",
+    "Modified planner.rs to treat the new builtins as control-only trees",
+    "Updated README.md with documentation for the three new builtins"
+  ],
+  "test_result": "Webots CI ran 15 scenarios (builtin, cap, flow). 14 passed. The 'plan_control_builtins' scenario failed because the test expected op_id '1' in the plan status output, but the actual plan used op_ids '16', '17', '18', '19'. All other scenarios (including camera, lidar, explore, navigation, memory, speech, voiceprint, scene, and fault recovery) passed successfully.",
+  "likely_root_cause": "The test scenario 'plan_control_builtins' assumes that the first op in a plan has op_id '1', but the executor assigns op_ids starting from a higher number (likely based on a global counter or arena index). The observed op_ids '16', '17', '18', '19' suggest the plan was not the first plan created in the session, or the op_id numbering does not start at 1.",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 332,
+      "text": "steps[0] did not match any plan round from 0; expected contracts=['robonix/system/executor/builtin/get_all_plans', 'robonix/system/executor/builtin/get_plan_status', 'robonix/system/executor/builtin/stop_plan_at']; observed round 0: calls=[('robonix/system/executor/builtin/get_all_plans', '1:0'), ('robonix/system/executor/builtin/get_plan_status', '1:1'), ('robonix/system/executor/builtin/stop_plan_at', '1:2')]; rtdl.children[1]: expected leaf 'robonix/system/executor/builtin/get_plan_status' did not satisfy assertions: jsonpath '$.ops[].op_id' missing exact value '1': ['16', '17', '18', '19']"
+    },
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 1,"
+    }
+  ],
+  "suggested_fix": "Update the test scenario 'plan_control_builtins' to not assume a specific op_id value. Instead, use a more flexible assertion, such as checking that the plan has ops with op_ids that are non-empty strings, or capture the actual op_id from get_all_plans and use it in subsequent steps. Alternatively, if the executor should always start op_ids at 1 for each plan, fix the op_id assignment logic in plan_runtime.rs.",
+  "risks_or_watchouts": [
+    "The op_id numbering scheme may change in future versions, causing similar test failures.",
+    "Other tests that rely on specific op_id values may also break.",
+    "The test scenario may need to be made more robust to handle varying op_id assignments."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-03T09:53:58+00:00"
+}

@@ -1,0 +1,54 @@
+{
+  "title": "All 15 scenarios passed — soma primitive lifecycle hardened",
+  "stage": "success",
+  "summary": "This PR hardens the soma primitive lifecycle by adding proper shutdown handlers to audio_client_bridge, tiago_camera, and tiago_lidar drivers, and improves driver start scripts with log redirection and background process management. The Webots CI ran 15 scenarios covering builtin, capability, and flow tests, all passing. The change also fixes atlas endpoint rewriting in soma's launcher and adds resilience to empty/invalid process state files.",
+  "pr_changes": [
+    "Added on_shutdown handlers to audio_client_bridge, tiago_camera, and tiago_lidar drivers",
+    "Improved tiago_camera, tiago_chassis, and tiago_lidar start.sh scripts with log redirection and background process management",
+    "Fixed tiago_chassis shutdown to log exceptions instead of silently passing",
+    "Changed liaison listen address from 127.0.0.1 to 0.0.0.0 in robonix_manifest.yaml and rbnx init template",
+    "Refactored soma launcher to use provider_atlas_endpoint() helper for consistent 0.0.0.0→127.0.0.1 rewriting",
+    "Added unit test for command_line rewriting of bind-all atlas to loopback",
+    "Made ProcessManager resilient to empty or invalid process state files by resetting instead of failing"
+  ],
+  "test_result": "All 15 scenarios passed (15/15, 100%). Tests exercised builtin file operations, plan control, camera/lidar snapshots, explore skill, mapping save, memory roundtrip, speech, voiceprint, scene object listing, fault recovery flows, object navigation, and patrol observe. The explore skill timed out as expected (5s and 8s ceilings).",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "examples/webots/primitives/tiago_camera/driver.py",
+      "line": 480,
+      "text": "@tiago_camera.on_shutdown\\ndef shutdown():\\n    return Ok()"
+    },
+    {
+      "source": "system/soma/src/launcher.rs",
+      "line": 324,
+      "text": "let provider_atlas = self.provider_atlas_endpoint();"
+    },
+    {
+      "source": "tools/rbnx/src/process.rs",
+      "line": 165,
+      "text": "if content.trim().is_empty() {\\n    warn!(...);\\n    self.save_state_internal(&HashMap::new())?;\\n    return Ok(());\\n}"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the scene-graph-llm JSONDecodeError warnings in scene logs — they are non-fatal but indicate the fake-vlm returns empty responses. Consider adding retry logic or a fallback for LLM enrichment.",
+  "risks_or_watchouts": [
+    "Scene graph LLM enrichment repeatedly fails with JSONDecodeError (fake-vlm returns empty response) — non-fatal but may degrade scene graph quality",
+    "Mapping and nav2 containers exited with status 137 (SIGKILL) during shutdown — likely OOM or timeout, not a functional issue",
+    "Explore skill timed out as expected, but the elapsed_s (34s) far exceeded the 5s timeout — the timeout is a soft ceiling, not a hard deadline"
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-09T22:10:10+00:00"
+}

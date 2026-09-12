@@ -1,0 +1,62 @@
+{
+  "title": "All 15 scenarios passed — hands-free audio and task interruption infrastructure added",
+  "stage": "success",
+  "summary": "This PR adds robot-local hands-free voice interaction (wake-word detection, reverse audio bridge, Liaison orchestration) and reliable task interruption via Executor cancel-all. All 15 CI scenarios passed across builtin, cap, and flow families, exercising 20 capabilities including speech, navigation, exploration, memory, and scene perception. No regressions were observed; the new hands-free and wake-word contracts were not directly tested by existing scenarios but are covered by build-time import validation.",
+  "pr_changes": [
+    "Added 4 new service definitions: GetAudioBridgeInfo, GetHandsfreeStatus, SetHandsfree, WatchHandsfreeEvents",
+    "Added 5 new capability TOML manifests: bridge_info, wake_word, handsfree events/set_enabled/status",
+    "Modified liaison/submit and liaison/voice contracts from kind=system to kind=service",
+    "Rewrote audio_client_bridge to support reverse WebSocket transport (robot listens, client connects)",
+    "Added ReverseAudioBridge class with mic/speaker streaming, barge-in, and control request handling",
+    "Added bridge_info gRPC endpoint to audio_client_bridge for Atlas discovery",
+    "Added wake_word.py with sherpa-onnx KWS backend and keyword file preparation",
+    "Added SpeechWakeWordServicer and wake-word initialization in speech service init",
+    "Added TTS caching and prewarm support in SpeechTtsServicer",
+    "Made local inference dependencies optional (local extra) in speech pyproject.toml",
+    "Added build-time model download for sherpa-onnx KWS model and Tencent backend validation",
+    "Added HandsfreeController in liaison with wake-word loop, voice turn orchestration, and event broadcasting",
+    "Added hands-free gRPC servicers (set_enabled, status, events) to liaison main",
+    "Modified voice session to suspend/resume hands-free capture and support barge-in metadata",
+    "Added VoiceSessionStream wrapper that aborts session task on drop",
+    "Added no-speech timeout (5s) and final_text TTS boundary handling in voice.rs",
+    "Added cancel_all_executor_plans call in Pilot abort_turn handler for reliable task interruption",
+    "Added exclusive mic stream lock in audio_driver to prevent overlapping capture",
+    "Added deployment-configured device IDs to audio_driver device list for persistence",
+    "Added guard_terminal_xy_m: 0.20 to nav2 config to prevent path-alignment yaw correction from being mistaken for stuck final rotation",
+    "Added voiceprint_service kill pattern to sim/stop.sh",
+    "Updated speech README with wake-word configuration and Tencent backend setup instructions",
+    "Updated speech package_manifest PYTHONPATH to include MCP types",
+    "Updated speech build.sh to support SPEECH_BACKEND=mock, Jetson torch, and wake-word model download"
+  ],
+  "test_result": "All 15 scenarios passed (15/15, 100%). Builtin tests: fault_recovery_builtin (3 rounds), file_roundtrip, plan_control_builtins, run_command. Cap tests: camera_snapshot, explore_smoke (2 rounds), lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list. Flow tests: fault_recovery (4 rounds), object_navigation (4 rounds), patrol_observe (3 rounds). Coverage includes 20 capabilities across executor, camera, lidar, mapping, memory, navigation, scene, speech, voiceprint, and explore.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "scenarios.restart.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor scene-graph LLM enrichment failures (fake-vlm returns empty JSON) — these are expected with the mock VLM and do not affect scenario pass/fail. The new hands-free and wake-word capabilities are not yet exercised by CI scenarios; consider adding a wake-word detection smoke test in a follow-up.",
+  "risks_or_watchouts": [
+    "Scene-graph LLM enrichment repeatedly fails with JSONDecodeError from fake-vlm — expected with mock, but real deployments need a working VLM endpoint.",
+    "New hands-free and wake-word contracts are not covered by existing CI scenarios; a dedicated smoke test would be valuable.",
+    "Audio driver mic stream lock may cause RESOURCE_EXHAUSTED errors if two clients attempt simultaneous capture — verify behavior in multi-client deployments.",
+    "Reverse audio bridge has no authentication or TLS — suitable only for trusted LAN or tunneled connections."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-13T15:45:42+00:00"
+}

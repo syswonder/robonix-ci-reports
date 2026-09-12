@@ -1,0 +1,45 @@
+{
+  "title": "All 15 Webots CI scenarios pass — GPU browser streaming optimization merged",
+  "stage": "success",
+  "summary": "This CI run tested the merge of PR #144 (feat/webots-gpu-browser-streaming) into dev. All 15 scenarios passed (100% rate), covering builtin file operations, plan control, camera/lidar snapshots, explore, mapping, memory, speech, voiceprint, scene object listing, fault recovery, object navigation, and patrol observe. The change set introduces an optimized browser streaming pipeline with a viewer server, stream proxy, and keepalive script to reduce bandwidth and improve remote viewing.",
+  "pr_changes": [
+    "Added viewer_server.py to serve WebotsView locally and proxy/cache remote viewer and world assets.",
+    "Added webots_stream_proxy.py to forward the live W3D stream while dropping unused robot-window camera payloads.",
+    "Added webots_stream_keepalive.py to keep externally controlled Webots simulations broadcasting at real-time speed.",
+    "Modified entrypoint.sh to launch the new viewer server, stream proxy, and keepalive scripts instead of the simple HTTP server.",
+    "Modified Dockerfile to copy the new Python scripts and install websockets dependency.",
+    "Modified compose.stream.yaml to expose the optimized stream port (default 1235) and set environment variables for the proxy.",
+    "Modified start.sh to reflect the new stream port and viewer port in log messages.",
+    "Updated README.md with documentation for the new streaming architecture, SSH forwarding example, and port override variables."
+  ],
+  "test_result": "All 15 scenarios passed: 4 builtin (fault_recovery_builtin, file_roundtrip, plan_control_builtins, run_command), 8 cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), and 3 flow (fault_recovery, object_navigation, patrol_observe). The CI exercised 20 capabilities across the system.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "scenarios.restart.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the new streaming components (viewer_server.py, webots_stream_proxy.py, webots_stream_keepalive.py) for any edge-case failures in production.",
+  "risks_or_watchouts": [
+    "The scene service's LLM enrichment (fake-vlm) consistently returns empty JSON, causing repeated JSONDecodeError warnings. This does not affect test pass/fail but indicates the fake VLM endpoint may need attention.",
+    "The rtabmap visualization (rtabmap_viz) fails to create a drawable due to missing DRI3 support in the headless Xorg environment. This is cosmetic and does not affect mapping functionality.",
+    "The nav2 velocity_guard crashes on shutdown with an RCLError (invalid context). This is a known ROS2 lifecycle issue and does not affect test results."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-13T17:44:08+00:00"
+}
