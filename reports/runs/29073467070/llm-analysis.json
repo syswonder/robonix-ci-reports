@@ -1,0 +1,41 @@
+{
+  "title": "All 15 scenarios passed",
+  "stage": "scenario",
+  "summary": "All 15 Webots integration scenarios passed (15/15, 100%). The CI exercised builtin file operations, plan control, camera/lidar snapshots, explore, mapping, memory, scene, speech, voiceprint, and multi-step flow scenarios. No regressions were introduced by the PR changes.",
+  "pr_changes": [
+    "Added new system/vitals crate with health monitoring, module health polling, Soma ingestion, mock Soma, and threshold evaluation",
+    "Added health-related IDL messages and services under capabilities/lib/health, module_health, soma, and vitals",
+    "Added module health gRPC endpoints to executor and pilot (get_health)",
+    "Added health streaming and get_health capabilities to Soma",
+    "Added new Cargo workspace member system/vitals and updated Makefile",
+    "Updated Cargo.lock with new dependencies (approx, chacha20, defmt, env_logger, jiff, etc.)",
+    "Added Python bridge scripts for Piper and Koch arm hardware",
+    "Added threshold YAML configuration and test fixtures for Vitals"
+  ],
+  "test_result": "15 scenarios passed: builtin/fault_recovery_builtin, builtin/file_roundtrip, builtin/plan_control_builtins, builtin/run_command, cap/camera_snapshot, cap/explore_smoke, cap/lidar_snapshot, cap/mapping_save, cap/memory_roundtrip, cap/scene_object_fixture, cap/speech_speak, cap/voiceprint_list, flow/fault_recovery, flow/object_navigation, flow/patrol_observe. All exercised capabilities returned expected results.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    }
+  ],
+  "suggested_fix": "No fix needed. The new Vitals crate and health capabilities are not yet exercised by CI scenarios; consider adding a Vitals smoke test in a follow-up PR.",
+  "risks_or_watchouts": [
+    "Vitals crate is not yet tested in CI — no scenario exercises robonix/system/vitals/get or stream",
+    "Soma health stream is empty in this deployment (no health primitive configured) — Vitals will send empty snapshots",
+    "Module health polling (executor/pilot get_health) is not yet integrated into Vitals in this CI run",
+    "New dependencies (approx, chacha20, defmt, env_logger, jiff) may increase build time and binary size"
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-10T06:40:18+00:00"
+}

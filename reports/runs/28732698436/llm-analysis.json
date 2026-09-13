@@ -1,0 +1,60 @@
+{
+  "title": "14/15 scenarios passed; scene_object_fixture fails on robot-only output",
+  "stage": "scenario",
+  "summary": "The CI run tested 15 scenarios covering builtin, cap, and flow families. 14 passed; the single failure is `scene_object_fixture`, which calls `robonix/system/scene/list_objects` and expects at least one non-robot object (label != \"robot\") in the output. The scene service returned only the robot self-object (`scene.object.robot_001`) across all 45 rounds, causing the regex assertion `\"label\":\\s*\"(?!robot)[^\"]+\"` to fail. All other scenarios (camera/lidar snapshots, explore, navigation, memory, speech, voiceprint, mapping, fault recovery, patrol observe, object navigation) passed successfully.",
+  "pr_changes": [
+    "system/pilot/src/planner.rs: Added `extract_json_object` to strip prose preamble before JSON parsing in RTDL responses; updated prompt to require JSON-only replies.",
+    "system/scene/README.md: Documented VLM-primary scene graph, stable object identity knobs, and new env vars.",
+    "system/scene/scene_service/ingest/perception_concept_graphs.py: Added cross-tick re-bind, soft eviction, same-class proximity collapse, merge class groups, and many tunable env vars for object identity stability.",
+    "system/scene/scene_service/ingest/perception_vlm.py: Added `VLM_REASONING_EFFORT` env var support.",
+    "system/scene/scene_service/scene_graph/builder.py: VLM-primary image-grounded relation pass; transient-blip guard preserves edges when <2 stable nodes; text fallback for semantic-only inference.",
+    "system/scene/scene_service/scene_graph/geometric_loop.py: New fast geometric loop (~3 Hz) producing `reachable_by` edges with debounce hysteresis.",
+    "system/scene/scene_service/scene_graph/geometry.py: Deterministic geometric predicates (contact/containment) and jitter-stable cache signature.",
+    "system/scene/scene_service/scene_graph/image_relations.py: Image-grounded VLM relation inference: project objects into camera frame, annotate, one VLM call for all relations.",
+    "system/scene/scene_service/scene_graph/llm_client.py: Added multimodal image support and `VLM_REASONING_EFFORT` forwarding.",
+    "system/scene/scene_service/scene_graph/prompts.py: Added semantic-only relation prompt and helper.",
+    "system/scene/scene_service/scene_graph/relations.py: Added `_normalize_relation`, `infer_semantic_relation`, increased LLM timeout to 60s.",
+    "system/scene/scene_service/scene_graph/store.py: Two-writer store (geometric + semantic slices); geometry-signature-based cache invalidation; `prune_relations`.",
+    "system/scene/scene_service/scene_graph/types.py: Added `reachable_by` to RELATION_TYPES; added `geometric` method.",
+    "system/scene/scene_service/service.py: Wired geometric loop and scene graph store unconditionally; LLM enrichment gated by SCENE_GRAPH_ENABLED.",
+    "system/scene/scene_service/state/__init__.py: Removed RelationEngine exports.",
+    "system/scene/scene_service/state/object_registry.py: Added `find_rebindable`, `soft_evict`, `prune_expired` for cross-tick object identity.",
+    "system/scene/scene_service/state/relations.py: Removed (replaced by geometric loop + scene graph).",
+    "system/scene/scene_service/web.py: Updated to use scene graph store; relations shown as text list instead of on-canvas lines.",
+    "system/scene/scripts/start.sh: Added env var passthrough for new scene knobs.",
+    "system/scene/tests/test_identity.py: New unit tests for object identity stability.",
+    "system/scene/tests/test_image_relations.py: New unit tests for image-grounded relation pass.",
+    "system/scene/tests/test_persistence.py: Added missing attributes to detector stub.",
+    "system/scene/tests/test_scene_graph.py: Updated tests for new store API, geometric relations, cache invalidation, debounce, semantic inference, normalization, reasoning effort, prune_relations."
+  ],
+  "test_result": "Webots CI exercised 15 scenarios: 4 builtin (fault_recovery_builtin, file_roundtrip, plan_control_builtins, run_command), 7 cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), and 3 flow (fault_recovery, object_navigation, patrol_observe). 14 passed. The failing scenario `scene_object_fixture` called `list_objects` 45 times; each time the scene service returned only the robot self-object, so the test's regex assertion for a non-robot label failed.",
+  "likely_root_cause": "The scene service's perception pipeline (concept-graphs detector) did not detect any non-robot objects during the test window. The registry contained only the robot self-object (`scene.object.robot_001`). This is likely because the Webots simulation world used in CI has no furniture or objects placed in the robot's field of view, or the perception models (YOLO-World, MobileSAM) did not fire within the test duration.",
+  "evidence": [
+    {
+      "source": "summary.json/scenarios[9]",
+      "line": 0,
+      "text": "scene_object_fixture: passed=false, failures=[\"steps[0] did not match any plan round from 0; ... output text did not match regex '\"label\":\\\\s*\"(?!robot)[^\"]+\"': '{\\n  \"objects\": [\\n    {\\n      \"id\": \"scene.object.robot_001\",\\n      \"label\": \"robot\",\\n      ...']"
+    },
+    {
+      "source": "summary.json/scenarios[9]/observed_rounds",
+      "line": 0,
+      "text": "All 45 rounds return only robot_001 with label \"robot\"."
+    },
+    {
+      "source": "ci-28732698436-scene.stdout.log",
+      "line": 4,
+      "text": "failed — persistence OFF for this session (no restore, no writes): No module named 'pymilvus'"
+    }
+  ],
+  "suggested_fix": "Ensure the Webots CI world includes at least one non-robot object (e.g., a table, chair, or box) within the robot's initial field of view so the perception pipeline has something to detect. Alternatively, adjust the test to accept a robot-only scene as valid (e.g., relax the regex or add a separate test for empty scenes). The pymilvus import error is a pre-existing environment issue and does not affect this test.",
+  "risks_or_watchouts": [
+    "The scene_object_fixture test will continue to fail in CI unless the simulation world is populated with objects.",
+    "The pymilvus import error prevents object memory persistence, but does not affect the current test failure.",
+    "Other scenarios (explore, navigation) rely on the robot being able to move and detect objects; they passed, indicating the robot can navigate but no objects were detected."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-05T07:19:03+00:00"
+}

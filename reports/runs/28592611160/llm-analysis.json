@@ -1,0 +1,47 @@
+{
+  "title": "✅ All 14 scenarios passed — new Vitals system added",
+  "stage": "success",
+  "summary": "All 14 Webots integration scenarios passed (100% pass rate). This PR introduces the new `robonix-vitals` health monitoring system, including Soma health stream ingestion, component-tree normalization, threshold matching, and state-change push. The CI exercised existing capabilities (camera, lidar, explore, navigation, memory, speech, voiceprint, scene, executor builtins) and flow scenarios (fault recovery, object navigation, patrol observe). No regressions detected.",
+  "pr_changes": [
+    "Added new system/vitals crate with gRPC health monitoring services (GetVitals, StreamVitals)",
+    "Added Soma health stream ingestion (StreamHealth) with threshold evaluation rules",
+    "Added mock Soma server with 5 scenarios (normal, ramp, fault, toggle, mixed) for development",
+    "Added hardware bridge subprocess support for Piper (CAN) and Koch (Dynamixel) arms",
+    "Added new IDL messages: SomaHealthSnapshot, ComponentStatus, ActuatorState, FaultState, PowerSourceState, SafetyState, VitalsSnapshot, BodyHealth, ComponentHealth, PowerState",
+    "Added new capability contracts: robonix/service/vitals/get, robonix/service/vitals/stream, robonix/system/soma/get_health, robonix/system/soma/health, robonix/primitive/health/state, robonix/primitive/health/stream",
+    "Updated Cargo.toml workspace members and Makefile build targets to include system/vitals",
+    "Updated Cargo.lock with new dependencies (defmt, env_logger, jiff, proc-macro-error2, portable-atomic-util, robonix-vitals)",
+    "Updated docs subproject commit"
+  ],
+  "test_result": "14/14 scenarios passed: builtin (fault_recovery_builtin, file_roundtrip, run_command), cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), flow (fault_recovery, object_navigation, patrol_observe). All leaf calls succeeded as expected, including expected failures (missing file, explore timeout, invalid memory save args).",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "summary.json",
+      "line": 2,
+      "text": "\"total\": 14,"
+    },
+    {
+      "source": "summary.json",
+      "line": 4,
+      "text": "\"rate\": 1.0,"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the new Vitals system in future CI runs to ensure Soma ingestion and threshold evaluation work correctly with real hardware bridges.",
+  "risks_or_watchouts": [
+    "New Vitals system is not yet exercised in CI scenarios — no test covers the health monitoring pipeline",
+    "Hardware bridge subprocesses (piper_bridge.py, koch_bridge.py) require external SDKs not present in CI environment",
+    "Mock Soma scenarios are for development only; production behavior depends on real Soma implementation",
+    "TTL-based STALE detection is not yet implemented (noted in soma_ingest.rs TODO)"
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-02T13:29:13+00:00"
+}

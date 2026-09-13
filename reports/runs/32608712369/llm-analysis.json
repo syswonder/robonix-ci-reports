@@ -1,0 +1,58 @@
+{
+  "title": "All 16 Webots scenarios passed for Tencent TTS long-text split PR",
+  "stage": "success",
+  "summary": "The tested commit merged PR #230 'fix(speech): split long Tencent TTS input' into dev. The change set modifies the speech service to split long Tencent TTS text into provider-safe segments, adds configurable character limits, enforces PCM-only output, and adds cancellation-aware synthesis. The Webots CI suite ran 16 scenarios covering navigation, memory, speech, and builtin capabilities; all 16 passed with no failures.",
+  "pr_changes": [
+    "Modified services/speech/README.md to document new TENCENT_TTS_MAX_CHARS and TENCENT_TTS_MAX_TOTAL_CHARS options and PCM-only contract",
+    "Updated services/speech/docs/speech_service.proto.ref to describe pcm_s16le output instead of MP3",
+    "Updated services/speech/package_manifest.yaml to require sample_rate=16000 and codec=pcm, adding max_chars and max_total_chars settings",
+    "Modified services/speech/speech_service/service.py to add TTS cache bounds, validate output metadata, handle TTSInputError, and make speak() async with cancellation support",
+    "Modified services/speech/speech_service/tencent_cloud.py to add text splitting logic, segment-based synthesis, PCM validation, and request limits",
+    "Added services/speech/speech_service/tts_errors.py defining TTSInputError",
+    "Added services/speech/speech_service/tts_runtime.py for request liveness tracking",
+    "Modified services/speech/tests/test_speak_queue.py to add tests for long-text speak, short-text behavior, and cancellation",
+    "Modified services/speech/tests/test_tencent_cloud.py to add extensive tests for text splitting, segment synthesis, limits, and cancellation",
+    "Added services/speech/tests/test_tts_servicers.py testing one-shot and streaming TTS servicers"
+  ],
+  "test_result": "Webots CI ran 16 scenarios (flow, builtin, and cap families) covering camera/lidar snapshots, map save, memory operations, navigation, speech/speak, voiceprint list, explore, executor builtins, and scene object listing. All 16 scenarios passed (rate 1.0). The speech_speak scenario dispatched robonix/service/speech/speak and observed success with output 'spoke 35 chars on audio_driver'. The object_navigation flow also passed, navigating to a potted plant approach pose with state SUCCEEDED.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 89,
+      "text": "RESULT: PASS — 16/16"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 0,
+      "text": "\"suite\": \"scenarios\", \"total\": 16, \"passed\": 16, \"failed\": 0, \"rate\": 1.0"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 0,
+      "text": "\"name\": \"speech_speak\", \"family\": \"cap\", \"passed\": true, \"rounds\": 1"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 0,
+      "text": "\"leaf_result\": {\"success\": true, \"output\": \"{\\n  \\\"ok\\\": true,\\n  \\\"detail\\\": \\\"spoke 35 chars on audio_driver\\\"\\n}\", \"error\": \"\"}"
+    }
+  ],
+  "suggested_fix": "No fix required. Follow-up: monitor the new Tencent TTS text-splitting logic in production, especially the hard-split fallback and the 40-request safety limit, to ensure long utterances are handled as expected.",
+  "risks_or_watchouts": [
+    "The new TTS splitting logic and limits (max 40 requests, 5000 total chars) may reject very long or punctuation-dense inputs that previously worked; verify against real Tencent TTS behavior.",
+    "The speech service now requires TENCENT_TTS_SAMPLE_RATE=16000 and TENCENT_TTS_CODEC=pcm; deployments with other settings will fail at startup.",
+    "The scene service logged repeated 'scene-graph-llm request failed: JSONDecodeError' warnings during the run; these did not affect the passing scenarios but may indicate a separate issue with the fake VLM response format.",
+    "The nav2 planner logged 'Failed to create a plan from potential when a legal potential was found' errors during exploration; these were expected/ignored in the passing explore scenarios but could indicate planner instability in larger maps."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-08-23T01:14:17+00:00"
+}

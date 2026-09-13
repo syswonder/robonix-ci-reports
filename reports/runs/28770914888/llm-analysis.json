@@ -1,0 +1,51 @@
+{
+  "title": "All 15 scenarios passed — memgraph service added",
+  "stage": "success",
+  "summary": "All 15 Webots integration scenarios passed (100%). The PR introduces a new memgraph (Scribe Mem) structured CKG memory service alongside the existing memsearch backend, adding three new contracts: remember, hybrid_search, and promote. Existing memory contracts (save, search, compact) are deprecated in favour of the new structured variants. The CI exercised all 15 scenarios including builtin file operations, sensor snapshots, exploration, navigation, speech, voiceprint, and memory round-trips — all passed without failures.",
+  "pr_changes": [
+    "Added new memgraph service with three MCP contracts: robonix/service/memory/remember, robonix/service/memory/hybrid_search, robonix/service/memory/promote",
+    "Added new IDL files: capabilities/lib/memgraph/srv/Compact.srv, Remember.srv, Search.srv",
+    "Added new capability manifests: capabilities/service/memory/hybrid_search.v1.toml, promote.v1.toml, remember.v1.toml",
+    "Modified existing memory SRV files (Save.srv, Search.srv, Compact.srv) to deprecate in favour of memgraph variants",
+    "Added full memgraph service implementation under services/memory/ including core pipeline modules, storage backends, tests, and demo data",
+    "Updated robonix_manifest.yaml to register the memgraph service in the deployment",
+    "Updated uv.lock to include robonix-memgraph as a workspace member and upgraded grpcio from 1.80.0 to 1.81.1",
+    "Updated docs submodule pointer"
+  ],
+  "test_result": "All 15 scenarios passed: 4 builtin (fault_recovery_builtin, file_roundtrip, plan_control_builtins, run_command), 7 cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), and 4 flow (fault_recovery, object_navigation, patrol_observe). The CI booted the full stack including the new memgraph service, ran all scenarios, and observed no failures.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "summary.json",
+      "line": 2,
+      "text": "\"total\": 15,"
+    },
+    {
+      "source": "summary.json",
+      "line": 3,
+      "text": "\"passed\": 15,"
+    },
+    {
+      "source": "summary.json",
+      "line": 4,
+      "text": "\"rate\": 1.0,"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the new memgraph service in future CI runs for any regressions, especially around the parallel memory backends (memgraph + memsearch) under the same namespace.",
+  "risks_or_watchouts": [
+    "Two memory backends (memgraph and memsearch) now coexist under robonix/service/memory/ — ensure Pilot and executor correctly discover and route to the appropriate backend.",
+    "The new memgraph service uses JSON-over-String for Phase1; Phase2 plans to switch to structured IDL — watch for breaking changes.",
+    "Scene graph LLM enrichment repeatedly failed with JSONDecodeError (fake-vlm returning empty body) — this is a known limitation of the fake VLM and does not affect scenario pass/fail, but may affect scene graph quality in production.",
+    "Voiceprint list returned 'db not initialised' — expected in CI with no enrolled speakers."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-06T06:04:16+00:00"
+}

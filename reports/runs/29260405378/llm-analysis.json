@@ -1,0 +1,43 @@
+{
+  "title": "Build failed: speech service missing speech_mcp module",
+  "stage": "build",
+  "summary": "The CI build failed because the speech service's post-codegen import verification could not find the 'speech_mcp' module. The build script runs `rbnx codegen` without the `--mcp` flag, so the MCP types directory is not generated, but the verification script expects it. The build log shows 'ModuleNotFoundError: No module named speech_mcp' at line 329. This is a build-time regression introduced by changes to the speech service's build script and package manifest.",
+  "pr_changes": [
+    "Added new service contracts: GetAudioBridgeInfo, GetHandsfreeStatus, SetHandsfree, WatchHandsfreeEvents, DetectWakeWord",
+    "Added capability TOML files for bridge_info, wake_word, handsfree events, set_enabled, and status",
+    "Modified liaison/submit.v1.toml and liaison/voice.v1.toml: changed kind from 'system' to 'service'",
+    "Updated audio_client_bridge README, main.py, reverse.py, package_manifest.yaml, and tests",
+    "Updated audio_driver/main.py: added exclusive mic lock, improved device selection, and deployment-configured device handling",
+    "Updated sim/stop.sh: added voiceprint_service kill pattern",
+    "Updated services/speech: README, package_manifest.yaml, pyproject.toml, build.sh, service.py, and added wake_word.py",
+    "Added system/liaison/src/handsfree.rs: new module for hands-free voice mode orchestration",
+    "Modified system/liaison/src/main.rs: integrated handsfree controller, registered new gRPC services",
+    "Modified system/liaison/src/voice.rs: added barge-in support, no-speech timeout, VoiceSessionStream, and improved endpoint resolution",
+    "Modified system/pilot/src/service.rs: added executor cancel_all_plans on abort_turn"
+  ],
+  "test_result": "No Webots simulation was started because the build step failed. The build summary shows 10 packages built successfully, 3 fetched, 0 skipped, and 1 failed (speech service). The caps.final.json shows Atlas was unreachable because the boot step never ran.",
+  "likely_root_cause": "The speech service build script (services/speech/scripts/build.sh) runs `rbnx codegen -p \"$PKG\"` without the `--mcp` flag, but the post-codegen verification script (line 329) tries to import `speech_mcp`, which is only generated when `--mcp` is passed. The previous build script used `rbnx codegen --mcp` but the new one removed that flag.",
+  "evidence": [
+    {
+      "source": "dl/_temp/sim-logs/build-webots-deployment.log",
+      "line": 329,
+      "text": "Traceback (most recent call last):\n  File \"<stdin>\", line 1, in <module>\nModuleNotFoundError: No module named 'speech_mcp'"
+    },
+    {
+      "source": "services/speech/scripts/build.sh",
+      "line": 0,
+      "text": "echo \"[build] rbnx codegen\"\nPATH=\"$PKG/$VENV/bin:$PATH\" rbnx codegen -p \"$PKG\""
+    }
+  ],
+  "suggested_fix": "Add the `--mcp` flag back to the `rbnx codegen` command in services/speech/scripts/build.sh, or update the verification script to skip the MCP import when the MCP types directory is absent.",
+  "risks_or_watchouts": [
+    "The speech service build script was refactored to support multiple backends (local/tencent/mock) and the codegen invocation was changed; the MCP flag was accidentally dropped.",
+    "Other services (memsearch, voiceprint, scene) still use `rbnx codegen --mcp` and build successfully.",
+    "The build failure prevents any simulation or scenario testing from running."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-13T15:04:18+00:00"
+}

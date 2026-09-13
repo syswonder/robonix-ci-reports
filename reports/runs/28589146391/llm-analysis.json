@@ -1,0 +1,56 @@
+{
+  "title": "All 14 Webots integration tests passed",
+  "stage": "success",
+  "summary": "This commit adds LLM-assisted CI report diagnostics. All 14 scenarios (3 builtin, 7 cap, 4 flow) passed with 100% rate. The pipeline exercised camera/lidar snapshots, SLAM map saving, memory roundtrip, speech synthesis, voiceprint listing, exploration with timeout/cancel, fault recovery, object navigation, and patrol observe. No regressions detected.",
+  "pr_changes": [
+    "Adds LLM-assisted report diagnostics for CI",
+    "Introduces testing infrastructure (scenarios, report generation, fake VLM)",
+    "Adds system components: atlas, executor, pilot, liaison, scene, scribe",
+    "Adds services: memsearch, speech, voiceprint",
+    "Adds primitives: camera, chassis, lidar, audio",
+    "Adds tools: rbnx CLI, codegen, robonix-api",
+    "Adds Webots simulation environment with Tiago robot",
+    "Adds CI workflows for testing, bot, docs check, issue/PR triage"
+  ],
+  "test_result": "14/14 scenarios passed: builtin (fault_recovery_builtin, file_roundtrip, run_command), cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), flow (fault_recovery, object_navigation, patrol_observe). All leaf calls succeeded as expected, including intentional failures (missing file, invalid args, explore timeout) that were correctly handled.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "summary.json",
+      "line": 51,
+      "text": "\"id\": \"missing_read\","
+    },
+    {
+      "source": "summary.json",
+      "line": 1113,
+      "text": "\"error\": \"mcp tool error: Error executing tool save: 1 validation error for saveArguments\\ndata\\n  Field required [type=missing, input_value={}, input_type=dict]\""
+    },
+    {
+      "source": "summary.json",
+      "line": 574,
+      "text": "\"output\": \"{\\n  \\\"known\\\": true,\\n  \\\"state\\\": \\\"TIMEOUT\\\",\\n  \\\"area_m2\\\": 0.9900000295042994,\\n  \\\"frontiers_left\\\": 1,\\n  \\\"elapsed_s\\\": 6.123993158340454,\\n  \\\"eta_s\\\": -1.0,\\n  \\\"detail\\\": \\\"hit 5.0s ceiling\\\"\\n}\""
+    },
+    {
+      "source": "summary.json",
+      "line": 1353,
+      "text": "\"timeout_s\": 8.0"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the scene-graph-LLM warnings in scene.log (fake VLM returns empty responses) — these are expected with the fake VLM but should be addressed when a real VLM is integrated.",
+  "risks_or_watchouts": [
+    "Scene graph LLM requests to fake VLM return empty responses (\"Expecting value: line 1 column 1\") — expected but noisy",
+    "Explore skill timed out as designed (5s and 8s ceilings) — no issue",
+    "Voiceprint list returns 'db not initialised' — expected for first run",
+    "Nav2 controller_server logged 'Failed to make progress' during object_navigation but recovered successfully"
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-02T12:29:53+00:00"
+}

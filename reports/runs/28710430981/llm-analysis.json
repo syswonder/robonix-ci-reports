@@ -1,0 +1,73 @@
+{
+  "title": "All 15 scenarios passed — Soma subsystem integrated and tested",
+  "stage": "success",
+  "summary": "This PR introduces the Soma subsystem (robonix-soma), a raw body YAML and URDF service that also owns primitive and skill package bring-up in two stages. All 15 Webots CI scenarios passed, covering builtin file operations, plan control, camera/lidar snapshots, exploration, mapping, memory, speech, voiceprint, scene object listing, fault recovery, object navigation, and patrol observe. The Soma service registered successfully, spawned 4 primitives (tiago_chassis, tiago_camera, tiago_lidar, audio_driver) in stage 1 and 1 skill (explore) in stage 2, and Pilot fetched Soma context at startup.",
+  "pr_changes": [
+    "Added new system/soma crate with config, deployment, launcher, service, store, and report modules",
+    "Added capabilities/system/soma/get_yaml and get_urdf contracts with IDL",
+    "Added examples/test_ci/soma.yaml and test_ci.urdf for testing",
+    "Added examples/webots/soma.yaml describing the Webots TIAGo robot",
+    "Modified Cargo.toml and Cargo.lock to include robonix-soma workspace member and dependencies",
+    "Modified Makefile with build-soma target and install step",
+    "Modified system/atlas/src/service.rs (minor formatting change)",
+    "Modified system/pilot/src/main.rs, planner.rs, service.rs to fetch and inject Soma context into system prompt",
+    "Added system/pilot/src/soma_context.rs for fetching YAML/URDF from Soma",
+    "Modified tools/rbnx/src/cmd/deploy.rs with soma spawning, stage-2 pipe, and ensure_soma_defaults",
+    "Modified tools/rbnx/src/cmd/clean.rs and run_package.rs to include soma in builtins list",
+    "Added tools/rbnx/src/launch.rs with shared package bring-up primitives (wait_for_registration_core, call_driver_cmd)",
+    "Modified tools/rbnx/src/lib.rs to export launch and pb modules",
+    "Modified tools/rbnx/src/process.rs to add process_group(0) and state save/remove",
+    "Modified tools/rbnx/Cargo.toml to add nix fs feature"
+  ],
+  "test_result": "Webots CI ran 15 scenarios (4 builtin, 7 cap, 4 flow) against a full system boot with atlas, executor, soma, pilot, liaison, scene, memory, speech, voiceprint, mapping, nav2, and explore. All 15 passed. Soma stage 1 spawned 4 primitives (tiago_chassis, tiago_camera, tiago_lidar, audio_driver) and stage 2 spawned 1 skill (explore). Pilot loaded Soma context at startup. Navigation succeeded to a potted plant approach pose. Exploration timed out as expected (5s and 8s ceilings).",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "rbnx-boot.log",
+      "line": 0,
+      "text": "[   9.744] [ OK ]  soma"
+    },
+    {
+      "source": "rbnx-boot.log",
+      "line": 0,
+      "text": "[  13.800] [ OK ]  soma stage 1        4 primitive package(s) handled by soma"
+    },
+    {
+      "source": "rbnx-boot.log",
+      "line": 0,
+      "text": "[  52.241] [ OK ]  soma                stage 2 trigger written"
+    },
+    {
+      "source": "soma.log (examples/webots/logs)",
+      "line": 0,
+      "text": "robonix-soma ready on 127.0.0.1:50091  (robot loaded, provider_id=soma)"
+    },
+    {
+      "source": "soma.log (examples/webots/rbnx-boot/logs)",
+      "line": 0,
+      "text": "stage 2 (skill bring-up) complete"
+    },
+    {
+      "source": "caps.final.json",
+      "line": 0,
+      "text": "\"provider_id\": \"soma\", \"state\": \"ACTIVE\""
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor scene-graph-llm request failures (fake-vlm returns empty responses) and nav2 'Failed to make progress' during object navigation — these are known CI environment limitations, not regressions.",
+  "risks_or_watchouts": [
+    "Scene-graph-llm requests to fake-vlm return empty responses (Expecting value: line 1 column 1) — scene graph relations will be empty until a real VLM is configured.",
+    "Nav2 controller_server logged 'Failed to make progress' during object navigation to potted plant, but the navigation eventually succeeded after replanning.",
+    "Voiceprint list returned 'db not initialised' — expected in CI with ephemeral storage.",
+    "Soma stage 2 trigger uses a blocking read on a raw fd; if rbnx closes the pipe early, skills won't start."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-04T15:28:59+00:00"
+}

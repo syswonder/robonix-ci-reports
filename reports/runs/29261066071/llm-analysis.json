@@ -1,0 +1,43 @@
+{
+  "title": "All 15 scenarios passed",
+  "stage": "scenario",
+  "summary": "The CI run executed 15 scenarios across builtin, cap, and flow families. All 15 passed on the first boot cycle. The tested commit is a merge of PR #139 (hands-free audio) into dev. The change set adds wake-word detection, hands-free voice interaction, reverse audio bridge transport, and related capability contracts. No failures were observed in the primary run.",
+  "pr_changes": [
+    "Added wake-word detection service (robonix/service/speech/wake_word) with sherpa-onnx KWS backend",
+    "Added hands-free controller in Liaison (system/liaison/src/handsfree.rs) with wake-word loop, voice turn orchestration, and event streaming",
+    "Added reverse audio bridge transport (audio_client_bridge) where the robot listens for client connections instead of dialing out",
+    "Added capability contracts for hands-free set_enabled, status, and events",
+    "Added bridge_info contract for reverse audio endpoint discovery",
+    "Modified audio_driver to use exclusive mic stream lock and preserve deployment-selected devices",
+    "Modified speech service to support pluggable backends (local/tencent/mock) and wake-word model download",
+    "Modified Pilot to cancel executor plans on abort_turn",
+    "Modified voice session to support barge-in metadata and no-speech timeout",
+    "Updated stop.sh to kill voiceprint_service and updated audio driver pkill patterns"
+  ],
+  "test_result": "Webots CI exercised 15 scenarios: 4 builtin (fault_recovery_builtin, file_roundtrip, plan_control_builtins, run_command), 8 cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), and 3 flow (fault_recovery, object_navigation, patrol_observe). All passed with 100% rate. The explore tasks timed out as expected (5s/8s ceilings). Navigation succeeded. A restart run showed a flaky object_navigation failure due to navigation aborts, but the primary run was clean.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    }
+  ],
+  "suggested_fix": "Monitor the flaky object_navigation scenario; the restart run showed navigation aborts possibly due to velocity guard or rotation guard trips. Consider increasing timeout or adjusting navigation parameters.",
+  "risks_or_watchouts": [
+    "The restart run showed a flaky object_navigation failure (navigation aborted) — may need investigation",
+    "Scene graph LLM enrichment failed repeatedly (JSONDecodeError from fake-vlm) — expected with mock VLM but could mask real issues",
+    "New hands-free and wake-word capabilities are not yet covered by CI scenarios",
+    "Reverse audio bridge transport is not exercised in CI (no client connection)"
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-13T15:20:26+00:00"
+}
