@@ -1,0 +1,71 @@
+{
+  "title": "Build succeeded, sim containers never started",
+  "stage": "build",
+  "summary": "The CI run built all 11 packages successfully (0 failures) but the simulation containers never started — every `docker inspect` and `docker logs` call returned \"No such container\" for the sim, scene, mapping, nav2, and explore containers. The atlas service was unreachable (\"Connection refused\"), so no Webots scenario was executed and no test results were produced. The change set introduces a VLM-primary scene graph with image-grounded relation inference, stable object identity via cross-tick re-binding and soft eviction, a fast geometric relation loop, and numerous new env knobs for object merging and identity tuning.",
+  "pr_changes": [
+    "system/pilot/src/planner.rs: Added `extract_json_object` to strip prose preamble from LLM JSON replies, updated RTDL protocol reminder to require JSON-only output, and added tests for prose tolerance.",
+    "system/scene/README.md: Documented VLM-primary scene graph architecture, new env vars for object identity/merge tuning, and troubleshooting for ghosting/flicker/collapse.",
+    "system/scene/scene_service/ingest/perception_concept_graphs.py: Added cross-tick re-binding, soft eviction, same-class proximity collapse, merge class groups, and many new env-overridable merge/identity knobs.",
+    "system/scene/scene_service/ingest/perception_vlm.py: Added `VLM_REASONING_EFFORT` env var support.",
+    "system/scene/scene_service/scene_graph/builder.py: Added image-grounded relation dispatch, transient-blip guard to preserve edges during flicker, and refactored relation inference into `_maybe_image_edges` and `_infer_text_edges`.",
+    "system/scene/scene_service/scene_graph/geometric_loop.py: New file — fast geometric loop producing `reachable_by` edges with debounce hysteresis.",
+    "system/scene/scene_service/scene_graph/geometry.py: New file — deterministic geometric predicates and jitter-stable geometry signature for cache invalidation.",
+    "system/scene/scene_service/scene_graph/image_relations.py: New file — image-grounded VLM relation inference with projection, annotation, and parsing.",
+    "system/scene/scene_service/scene_graph/llm_client.py: Added multimodal image support and `reasoning_effort` forwarding.",
+    "system/scene/scene_service/scene_graph/prompts.py: Added semantic-only relation prompt and helper.",
+    "system/scene/scene_service/scene_graph/relations.py: Added `_normalize_relation`, `infer_semantic_relation`, and increased LLM timeout to 60s.",
+    "system/scene/scene_service/scene_graph/store.py: Refactored to two-slice store (geometric + semantic), added geometry-signature-based cache invalidation, `prune_relations`, and composed `get_snapshot`.",
+    "system/scene/scene_service/scene_graph/types.py: Added `reachable_by` to relation types and `geometric` method.",
+    "system/scene/scene_service/service.py: Wired geometric loop and scene-graph store unconditionally; removed old RelationEngine.",
+    "system/scene/scene_service/state/__init__.py: Removed RelationEngine exports.",
+    "system/scene/scene_service/state/object_registry.py: Added `find_rebindable`, `soft_evict`, and `prune_expired` for cross-tick identity stability.",
+    "system/scene/scene_service/state/relations.py: Removed (replaced by geometric loop + scene graph).",
+    "system/scene/scene_service/web.py: Removed on-canvas relation edge drawing, added relation list in info panel.",
+    "system/scene/scripts/start.sh: Added env var passthrough for new merge/identity knobs.",
+    "system/scene/tests/test_identity.py: New file — unit tests for cross-tick re-binding, soft eviction, and merge class groups.",
+    "system/scene/tests/test_image_relations.py: New file — unit tests for image-grounded relation inference.",
+    "system/scene/tests/test_persistence.py: Added missing attributes to detector stub.",
+    "system/scene/tests/test_scene_graph.py: Added tests for geometric relations, cache invalidation, store composition, debounce, semantic inference, relation normalization, reasoning effort, and prune_relations."
+  ],
+  "test_result": "No Webots scenarios were executed because the simulation containers never started. The build phase completed successfully (11/11 packages built). All subsequent container operations (inspect, logs) returned 'No such container' errors, and the atlas service was unreachable. The test summary reports 'NO DATA' with 0/0 scenarios.",
+  "likely_root_cause": "The simulation container (ci-28738544451-sim) failed to start or was never created, causing all dependent containers (scene, mapping, nav2, explore) to also be absent. The atlas service at 127.0.0.1:19451 was unreachable (Connection refused). This is an infrastructure issue — likely a Docker daemon or resource allocation problem on the runner, not a code defect.",
+  "evidence": [
+    {
+      "source": "dl/_temp/sim-logs/caps.final.json",
+      "line": 1,
+      "text": "Error: connect to atlas at '127.0.0.1:19451' ... Connection refused (os error 111)"
+    },
+    {
+      "source": "dl/_temp/sim-logs/sim-container-image.txt",
+      "line": 2,
+      "text": "error: no such object: ci-28738544451-sim"
+    },
+    {
+      "source": "dl/_temp/sim-logs/webots.stdout.log",
+      "line": 1,
+      "text": "Error response from daemon: No such container: ci-28738544451-sim"
+    },
+    {
+      "source": "dl/_temp/sim-logs/ci-28738544451-scene.stdout.log",
+      "line": 1,
+      "text": "Error response from daemon: No such container: ci-28738544451-scene"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/report/summary.md",
+      "line": 3,
+      "text": "**Result:** `NO DATA`"
+    }
+  ],
+  "suggested_fix": "Investigate why the sim container failed to start: check Docker daemon logs, runner resource limits (CPU/memory/disk), and the Webots image build step. Re-run the CI workflow after ensuring the runner has sufficient resources and Docker is healthy.",
+  "risks_or_watchouts": [
+    "The new VLM-primary scene graph depends on a working camera frame bundle from the perception detector; if the camera→map transform is unavailable, it falls back to text-only inference which may be slower and less accurate.",
+    "The cross-tick re-binding and soft eviction logic relies on `SCENE_OBJECT_TTL_SEC` (default 30s); if objects leave view for longer than the TTL, their ids will be hard-pruned and re-detection will mint fresh ids.",
+    "The image-grounded relation pass adds a ~30s VLM call per rebuild cycle; if the VLM is slow or times out, the builder falls back to text-only inference, which may produce fewer or less accurate relations.",
+    "The geometric loop's debounce hysteresis (2 ticks to emit, 1 tick grace) may delay `reachable_by` edges by up to ~1s at 3 Hz, which is acceptable for Pilot but worth monitoring."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-05T11:07:53+00:00"
+}

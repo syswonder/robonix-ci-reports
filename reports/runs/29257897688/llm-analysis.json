@@ -1,0 +1,70 @@
+{
+  "title": "Speech service registration timeout; hands-free voice features not tested",
+  "stage": "boot",
+  "summary": "The CI boot completed with 10 of 11 packages up. The speech service failed to register with Atlas within the 60-second timeout, preventing any hands-free or wake-word functionality from being exercised. The build log shows the speech package was built with the 'mock' backend and the wake-word model was downloaded successfully, but the service never registered as a provider. All other packages (primitives, liaison, pilot, scene, mapping, nav2, voiceprint, memory, explore) started and reached ACTIVE state.",
+  "pr_changes": [
+    "Added hands-free voice interaction system: new Liaison gRPC contracts (set_enabled, status, events), Rust HandsfreeController with wake-word detection loop, voice turn orchestration, and barge-in support.",
+    "Added wake-word detection: new Speech service gRPC contract (DetectWakeWord), sherpa-onnx KWS backend, model download during build, configurable phrases and thresholds.",
+    "Added reverse audio bridge transport: new audio_client_bridge reverse WebSocket mode, bridge_info discovery contract, client-initiated connection without storing client IP.",
+    "Added TTS caching and prewarming in Speech service to reduce latency for common phrases.",
+    "Added exclusive mic stream locking in audio_driver to prevent overlapping capture clients.",
+    "Added Executor cancel_all_plans integration in Pilot for reliable task interruption.",
+    "Added no-speech timeout (5s) in voice session capture to avoid hanging on silent input.",
+    "Added VoiceSessionStream wrapper to abort background session tasks on stream drop.",
+    "Changed liaison/voice to suspend handsfree capture during explicit voice sessions and resume at ASR final.",
+    "Changed liaison/voice to use FINAL_TEXT for TTS narration when TEXT_CHUNK events are absent.",
+    "Changed speech build to support SPEECH_BACKEND=mock/tencent/local with conditional dependency installation.",
+    "Changed speech build to download wake-word model unconditionally (not just for local backend).",
+    "Changed speech service to initialize wake-word backend and TTS prewarming during init().",
+    "Changed audio_driver select_device to preserve previous driver parameters when switching devices.",
+    "Changed audio_driver list_devices to expose configured deployment selections as first-class choices.",
+    "Changed audio_client_bridge to support reverse transport with bridge_info RPC.",
+    "Changed package_manifest for audio_client_bridge to declare bridge_info capability.",
+    "Changed sim/stop.sh to kill voiceprint_service and updated audio process patterns.",
+    "Changed services/speech/README.md with wake-word configuration documentation.",
+    "Changed services/speech/pyproject.toml to make local inference optional and add sherpa-onnx dependencies.",
+    "Changed capabilities/system/liaison/submit.v1.toml and voice.v1.toml kind from 'system' to 'service'.",
+    "Added unit tests for barge-in superseding speaker, send forwarding, stale mic end, final_text TTS, barge_in metadata parsing, VoiceSessionStream abort, and AbortOnDrop."
+  ],
+  "test_result": "Webots CI booted the deployment and ran all packages except speech. The speech service failed to register with Atlas within 60 seconds (see rbnx-boot.log line 723: 'registration timeout after 60s'). All other 10 packages (atlas, executor, soma, tiago_chassis, tiago_camera, tiago_lidar, audio_driver, pilot, liaison, scene, memory, voiceprint, mapping, nav2, explore) started successfully. No scenario tests were executed because the speech service was unavailable.",
+  "likely_root_cause": "The speech service process (PID 2564202) was started but never registered a provider with Atlas. The build log shows the mock backend was selected and the wake-word model was downloaded, but the service may have crashed during initialization or failed to connect to Atlas. The speech.log file was not captured in the artifacts, so the exact error is unknown.",
+  "evidence": [
+    {
+      "source": "dl/_temp/rbnx-boot.log",
+      "line": 723,
+      "text": "[FAIL]  speech              registration timeout after 60s — see /home/wheatfox/actions-runner-robonix-temp/_work/robonix/robonix/examples/webots/rbnx-boot/logs/speech.log"
+    },
+    {
+      "source": "dl/_temp/rbnx-boot.log",
+      "line": 863,
+      "text": "[FAIL]  speech              [service] [service/speech] timed out after 60s — package never registered a provider with atlas."
+    },
+    {
+      "source": "dl/_temp/sim-logs/build-webots-deployment.log",
+      "line": 117,
+      "text": "[build] speech backend: mock"
+    },
+    {
+      "source": "dl/_temp/sim-logs/build-webots-deployment.log",
+      "line": 250,
+      "text": "[build] downloading Speech wake-word model (sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20)"
+    },
+    {
+      "source": "dl/robonix/robonix/examples/webots/rbnx-boot/logs/rbnx.log",
+      "line": 23,
+      "text": "Running package::speech (PID 2564202)"
+    }
+  ],
+  "suggested_fix": "Inspect the missing speech.log artifact to determine why the speech service failed to register. Common causes: missing environment variables (e.g., SPEECH_BACKEND not set correctly), Python import errors in the mock backend, or a crash during wake-word model loading. Ensure the speech service's venv has all required dependencies and that the Atlas endpoint is reachable. Consider increasing the registration timeout or adding retry logic.",
+  "risks_or_watchouts": [
+    "Speech service registration failure blocks all voice and hands-free features; this is a critical path for the PR's new functionality.",
+    "The speech.log artifact was not captured; future CI runs should ensure all service logs are collected even on failure.",
+    "The mock backend was selected for CI; real deployments using local or Tencent backends may have different failure modes.",
+    "The wake-word model download succeeded but the service may have crashed during model loading or keyword file preparation."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-13T14:43:30+00:00"
+}

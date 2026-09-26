@@ -1,0 +1,43 @@
+{
+  "title": "All 15 scenarios passed — Scene live views and protobuf runtime generation improvements",
+  "stage": "success",
+  "summary": "This CI run tested PR #173 which improves Scene's web UI responsiveness and adds runtime-compatible protobuf stub generation. All 15 scenarios passed across builtin, cap, and flow families, exercising 20 capabilities including camera/lidar snapshots, mapping, memory, navigation, speech, voiceprint, explore, scene object listing, and executor builtins. The simulation booted successfully with Webots 2025a and all 11 components came up. No regressions were observed.",
+  "pr_changes": [
+    "Added SCENE_WEB_HOST env variable and resolve_web_host() to allow binding the Scene web UI to loopback for safety-sensitive deployments",
+    "Added runtime-compatible protobuf stub generation in start.sh using the container's own grpc_tools.protoc, with validation and bind-mask to prevent host gencode conflicts",
+    "Added camera preview caching with single-flight, rate-limited encoding off the event loop to keep live views responsive",
+    "Added occupancy map loading guards with token-based stale callback rejection and first-paint readiness indicators in both debug and editor HTML pages",
+    "Updated ephemeral mapping warnings to guide operators to save the live session and load it in localization mode instead of suggesting config.map_id",
+    "Added unit tests for web binding, camera caching, occupancy guards, ephemeral warnings, and runtime protobuf contract"
+  ],
+  "test_result": "All 15 scenarios passed (15/15, 100%). Coverage includes: camera_snapshot, lidar_snapshot, mapping_save, memory_roundtrip, memory_save/search, navigation/navigate, speech_speak, voiceprint_list, explore_smoke (explore/status/cancel), executor builtins (read_file, write_file, list_dir, run_command, get_all_plans, get_plan_status, stop_plan_at), scene_object_fixture (list_objects), and flow scenarios (fault_recovery, object_navigation, patrol_observe). The simulation ran two boot cycles with map save/load and localization mode restart.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "scene.stdout.log",
+      "line": 374,
+      "text": "07-23 08:34:44.281  W scene                    [scene-graph-llm] request failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    }
+  ],
+  "suggested_fix": "The repeated JSONDecodeError from scene-graph-llm indicates the fake-vlm returns empty responses for relation inference. This is expected in CI with a mock VLM but should be monitored if real VLM integration is used. No fix needed for this run.",
+  "risks_or_watchouts": [
+    "Scene graph LLM enrichment repeatedly fails with JSONDecodeError from fake-vlm — expected in CI but may mask real VLM issues in production",
+    "Explore skill times out waiting for map→base_link tf on first boot cycle (no occupancy map yet) — expected behavior but adds latency",
+    "Camera preview caching uses a 0.4s min interval — may cause stale frames under rapid polling"
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-23T08:35:37+00:00"
+}

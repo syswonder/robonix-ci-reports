@@ -1,0 +1,162 @@
+{
+  "title": "All 15 scenarios passed — epoch-safe scene persistence changes verified",
+  "stage": "success",
+  "summary": "This CI run tested the merged PR #172 'feat(scene): epoch-safe semantic map persistence keyed by save tokens' on commit c02f920. All 15 scenarios passed (15/15, 100%), including builtin file operations, camera/lidar snapshots, explore smoke tests, mapping save, memory roundtrip, speech, voiceprint, and flow scenarios for fault recovery, object navigation, and patrol observe. The test also exercised a map save/load/delete cycle with scene object persistence, confirming the new epoch-safe snapshot mechanism works correctly.",
+  "pr_changes": [
+    "system/scene/README.md: Documented epoch-safe Save/Load/Delete map library, SCENE_RESTORE_ON_START legacy mode, and lifecycle watcher epoch response.",
+    "system/scene/scene_service/annotations.py: Added has_saved() method to guard against overwriting previously saved room annotations.",
+    "system/scene/scene_service/map_binding.py: Updated docstring to reflect lifecycle watcher's epoch response (flush derived objects, flag stale annotations).",
+    "system/scene/scene_service/map_meta.py: New file — epoch sidecar (MapMetaStore) pairing each saved map with its object snapshot partition.",
+    "system/scene/scene_service/persistence.py: Added partition-scoped persist/load_all, purge_live_partitions, and strict mode for Load path.",
+    "system/scene/scene_service/scene_graph/builder.py: Object persistence only in legacy SCENE_RESTORE_ON_START mode; default mode passes None.",
+    "system/scene/scene_service/service.py: Major refactor — lifecycle watcher now flushes objects on epoch bump, shared ops_lock, semantic_hold for Save blocking, live_binding dict, and SCENE_RESTORE_ON_START logic.",
+    "system/scene/scene_service/state/object_registry.py: Added clear_objects() method for lifecycle flush.",
+    "system/scene/scene_service/web.py: Map facade (Save/Load/Delete) with epoch-safe snapshot partitions, sidecar commit ordering, and hazard guards (409/502).",
+    "system/scene/tests/test_annotations.py: Added test_has_saved_reflects_persisted_partitions_only.",
+    "system/scene/tests/test_lifecycle_flush.py: New file — state-machine tests for lifecycle watcher epoch response.",
+    "system/scene/tests/test_map_epoch.py: New file — epoch-safety tests for web map facade (Save/Load/Delete).",
+    "system/scene/tests/test_map_meta.py: New file — unit tests for MapMetaStore sidecar.",
+    "system/scene/tests/test_persistence.py: Added test_partition_scoped_operations."
+  ],
+  "test_result": "Webots CI exercised 15 scenarios across builtin, cap, and flow families. All passed. Key observations: explore tasks timed out as expected (5.0s/8.0s ceilings); scene graph LLM enrichment repeatedly failed with JSONDecodeError (fake-vlm returns empty response); map save/load/delete cycle with scene object persistence passed all 16 checks (save ok, spatial ok, preview, artifact, load restores 27 objects, delete cleans up).",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 1,
+      "text": "save_response {\"annotations\": 0, \"detail\": \"saved spatial map ci_scene_map_29993498427-1; rtabmap backup completed; ...\", \"objects\": 27, \"ok\": true, \"snapshot_partition\": \"ci_scene_map_29993498427-1__s1\", ...}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 2,
+      "text": "PASS scene_save_ok saved spatial map ci_scene_map_29993498427-1; rtabmap backup completed; ..."
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 3,
+      "text": "PASS scene_validation_spatial_ok ok"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 4,
+      "text": "PASS scene_validation_has_preview validation={'map_id': 'ci_scene_map_29993498427-1', 'spatial_ok': True, ...}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 5,
+      "text": "PASS scene_semantic_counts_reported objects=27 rooms=0"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 6,
+      "text": "artifact {\"artifact_size\": 69885952, \"base\": \"/home/wheatfox/.../mapping-maps/ci_scene_map_29993498427-1\", ...}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 7,
+      "text": "PASS artifact_directory_exists /home/wheatfox/.../mapping-maps/ci_scene_map_29993498427-1"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 8,
+      "text": "PASS artifact_sqlite_exists ['meta.yaml', 'occupancy.pgm', 'occupancy.png', 'occupancy.yaml', 'rtabmap.db']"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 9,
+      "text": "PASS artifact_quick_check_ok ok"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 10,
+      "text": "PASS artifact_size_nontrivial 69885952"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 11,
+      "text": "PASS artifact_nodes_nontrivial {'Node': 98, 'Data': 98, 'Link': 482, 'Word': 21327}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 12,
+      "text": "PASS preview_exists ['meta.yaml', 'occupancy.pgm', 'occupancy.png', 'occupancy.yaml', 'rtabmap.db']"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 13,
+      "text": "load_response {\"detail\": \"loaded immutable map ci_scene_map_29993498427-1 via runtime copy; ...\", \"objects_flushed\": 25, \"objects_restored\": 27, \"ok\": true, \"snapshot_partition\": \"ci_scene_map_29993498427-1__s1\"}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 14,
+      "text": "PASS scene_load_ok loaded immutable map ci_scene_map_29993498427-1 via runtime copy; ..."
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 15,
+      "text": "PASS scene_load_reported_fresh_occupancy {'count': 98, 'stamp_unix': 1784797732.973829, 'width': 210, 'height': 243}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 16,
+      "text": "live_map {\"frame_id\": \"map\", \"free\": 21055, \"height\": 243, \"known\": 23049, \"occupied\": 1994, ...}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 17,
+      "text": "PASS live_map_known_cells {'width': 210, 'height': 243, 'resolution': 0.05000000074505806, 'known': 23049, ...}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 18,
+      "text": "PASS preview_matches_meta meta=210x243 preview=210x243"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 19,
+      "text": "INFO loaded_map_dimensions meta=210x243 live=210x243 delta=0x0 cells"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 20,
+      "text": "PASS loaded_map_origin_matches_saved_meta dx=0.0000 dy=0.0000 meta=(-7.699544906616211, -5.276757717132568) live=(-7.699544906616211,-5.276757717132568)"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 21,
+      "text": "delete_response {\"detail\": \"deleted ci_scene_map_29993498427-1\", \"map_id\": \"ci_scene_map_29993498427-1\", \"ok\": true, \"scene_cleanup\": {\"annotations_deleted\": true, \"objects_deleted\": 27}}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 22,
+      "text": "PASS delete_after_ok {'ok': True, 'map_id': 'ci_scene_map_29993498427-1', 'detail': 'deleted ci_scene_map_29993498427-1', 'scene_cleanup': {'annotations_deleted': True, 'objects_deleted': 27}}"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 23,
+      "text": "summary: 16/16 checks passed"
+    }
+  ],
+  "suggested_fix": "No fix needed — all tests passed. Monitor the fake-vlm JSONDecodeError in scene graph LLM enrichment; it is expected with the fake-vlm stub but may indicate a real issue if a production VLM is used.",
+  "risks_or_watchouts": [
+    "Scene graph LLM enrichment repeatedly fails with JSONDecodeError from fake-vlm (returns empty response). This is expected in CI with the fake-vlm stub, but should be monitored when using a real VLM.",
+    "Explore tasks time out as expected (5.0s/8.0s ceilings) — no action needed.",
+    "Voiceprint list returns 'db not initialised' — expected in CI without a voiceprint database.",
+    "The new epoch-safe persistence mechanism introduces complexity in Save/Load/Delete ordering; ensure the ops_lock and semantic_hold guards are tested in production scenarios."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-23T09:13:22+00:00"
+}
