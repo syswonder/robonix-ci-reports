@@ -1,0 +1,49 @@
+{
+  "title": "CI: lifecycle validation and package stop hooks added",
+  "stage": "report",
+  "summary": "This PR adds explicit `stop:` hooks to all package manifests and a new CI lifecycle validator that tests boot → shutdown → re-boot. The Soma launcher and `rbnx boot`/`shutdown` commands are refactored to use a shared `shutdown_package_runtime` function that calls Driver(CMD_SHUTDOWN), then the manifest stop hook, then SIGTERM/SIGKILL. The CI workflow now runs the lifecycle validator after the scenario suite and then re-runs scenarios on the restarted stack. The report shows 'NO DATA' because no scenario summary was produced; the Webots sim container had repeated 'extern controller' connection failures, which may have prevented scenarios from running.",
+  "pr_changes": [
+    "Added `stop:` hooks to package manifests for audio_driver, audio_macos_bridge, tiago_camera, tiago_lidar, tiago_chassis, simple_nav, memsearch, speech, voiceprint, and scene packages.",
+    "Added `stop` field to manifest schema in `tools/rbnx/src/manifest.rs`.",
+    "Refactored teardown in `tools/rbnx/src/cmd/teardown.rs` to use `shutdown_package_runtime` with atlas endpoint, stop hook, and process group termination.",
+    "Updated `tools/rbnx/src/cmd/deploy.rs` and `tools/rbnx/src/cmd/shutdown.rs` to pass atlas endpoint to teardown.",
+    "Added `PackageRuntimeRecord` struct and `shutdown_package_runtime` function in `tools/rbnx/src/launch.rs`.",
+    "Updated Soma launcher in `system/soma/src/launcher.rs` to track children and call `shutdown_package_runtime` on stop.",
+    "Added `validate_lifecycle.py` script for boot/shutdown/re-boot validation.",
+    "Updated CI workflow to run lifecycle validator and re-run scenarios after restart.",
+    "Fixed PYTHONPATH in tiago_chassis start.sh to include codegen proto_gen directory.",
+    "Changed voiceprint start to use venv python directly instead of `uv run`.",
+    "Updated ProcessManager to store package_path and command, and to validate process liveness more strictly (zombie detection, cmdline/cwd matching).",
+    "Moved process state file from `~/.robonix/processes.json` to per-deploy directory."
+  ],
+  "test_result": "CI built 11 packages successfully and booted the Webots stack. The lifecycle validator ran but its output is not captured in the logs. The scenario suite produced no machine-readable summary (0/0 scenarios). The Webots sim container logs show repeated 'extern controller' connection failures for my_robot and Ros2Supervisor, indicating the robot controller never successfully attached to Webots. The final caps check failed with 'Connection refused' to atlas, suggesting the stack was not running at report time.",
+  "likely_root_cause": "The Webots sim container's robot controller repeatedly failed to connect as an extern controller, preventing the simulation from starting. This is a pre-existing infrastructure issue unrelated to the PR changes.",
+  "evidence": [
+    {
+      "source": "dl/_temp/sim-logs/webots.stdout.log",
+      "line": 0,
+      "text": "The specified robot (at /tmp/webots/root/1234/ipc/my_robot/extern) is not in the list of robots with <extern> controllers, retrying for another 50 seconds..."
+    },
+    {
+      "source": "dl/_temp/sim-logs/caps.final.json",
+      "line": 1,
+      "text": "Error: connect to atlas at '127.0.0.1:19037' ... Connection refused (os error 111)"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/report/summary.md",
+      "line": 3,
+      "text": "**Result:** `NO DATA`"
+    }
+  ],
+  "suggested_fix": "Investigate why the Webots extern controller connection fails. Check that the robot name in the URDF matches the extern controller declaration, and that Webots is configured to accept extern controllers. This is likely a timing or configuration issue in the sim container entrypoint.",
+  "risks_or_watchouts": [
+    "The lifecycle validator and re-run scenarios may not have executed if the first boot failed; check CI logs for those steps.",
+    "The new stop hooks use pkill patterns that may be fragile if process names change.",
+    "The process state file relocation from ~/.robonix/ to per-deploy may break existing workflows that depend on the old path."
+  ],
+  "confidence": "medium",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-08T15:40:24+00:00"
+}

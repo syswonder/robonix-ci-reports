@@ -1,0 +1,40 @@
+{
+  "title": "CI diagnostic: merge dev-next into dev",
+  "stage": "unknown",
+  "summary": "This PR merges dev-next into dev, introducing a shared lifecycle driver contract, removing local audio primitives in favor of external packages, and adding Webots simulator network and runtime-state improvements. CI produced no machine-readable scenario summary and no logs were captured, so the test outcome is unknown. The change set is large and touches CI workflow, manifests, and simulator scripts.",
+  "pr_changes": [
+    "Added shared lifecycle driver contract and legacy-compatible driver TOMLs for various primitives/services",
+    "Removed local audio_driver and audio_client_bridge primitives, replaced with external package URLs",
+    "Added submodule capabilities/lib/unique_identifier_msgs",
+    "Updated Webots simulator scripts for bridge networking, soma runtime mount, and rviz PID management",
+    "Added config.spec files for tiago_camera, tiago_chassis, tiago_lidar",
+    "Added test_manifest_config.py and test_container_network.sh for deployment config validation",
+    "Modified CI workflow to handle root-owned artifacts and pre-create soma-runtime directory"
+  ],
+  "test_result": "No machine-readable scenario summary was produced and no logs were embedded, so Webots CI exercised nothing observable in this context. The summary reports total=0, passed=0, failed=0, indicating no test results were captured.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary",
+      "line": 0,
+      "text": "No machine-readable scenario summary was produced; logs are still embedded below."
+    },
+    {
+      "source": "summary",
+      "line": 0,
+      "text": "total: 0, passed: 0, failed: 0"
+    }
+  ],
+  "suggested_fix": "Investigate why CI produced no scenario summary or logs; ensure the CI pipeline captures and reports test results for future runs.",
+  "risks_or_watchouts": [
+    "Removal of local audio primitives may break deployments that rely on local ALSA audio",
+    "New shared lifecycle driver contract may require updates to existing provider manifests",
+    "Bridge network mode requires explicit ROBONIX_ZENOH_ROUTER setting; misconfiguration could cause DDS communication failures",
+    "Soma runtime mount creation in CI may fail if directory permissions are not handled correctly"
+  ],
+  "confidence": "medium",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-08-21T09:39:04+00:00"
+}

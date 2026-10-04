@@ -1,0 +1,46 @@
+{
+  "title": "All 15 scenarios passed",
+  "stage": "success",
+  "summary": "All 15 Webots integration test scenarios passed (15/15, 100%). The PR scopes all persistent scene state by map_id, binding it to the mapping's named map. Changes include adding SCENE_MAP_ID env var, fixing Dockerfile wheel filenames, adding pymilvus dependency, forcing YOLO device, loading Milvus collections, partitioning scene-graph caches by map_id, and updating tests. The CI exercised builtin, cap, and flow scenarios covering file operations, plan control, camera/lidar snapshots, explore, mapping, memory, scene objects, speech, voiceprint, fault recovery, object navigation, and patrol observe.",
+  "pr_changes": [
+    "Added SCENE_MAP_ID env var to manifest and map_id config to mapping service",
+    "Fixed Dockerfile to use canonical wheel filenames for torch/torchvision",
+    "Added pymilvus[milvus_lite] dependency to scene-base.txt",
+    "Forced YOLO device to self._device in perception_concept_graphs.py",
+    "Added explicit load_collection call in persistence.py for milvus-lite 3.x",
+    "Partitioned SceneGraphStore caches by map_id in store.py",
+    "Computed map_id once in service.py and passed to ObjectStore and SceneGraphStore",
+    "Updated test_persistence.py to guard on milvus_lite import",
+    "Added test_store_cache_map_id_partition test in test_scene_graph.py"
+  ],
+  "test_result": "15 scenarios across builtin, cap, and flow families all passed. Builtin tests: fault_recovery_builtin, file_roundtrip, plan_control_builtins, run_command. Cap tests: camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list. Flow tests: fault_recovery, object_navigation, patrol_observe. All leaf calls succeeded as expected.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "summary.json",
+      "line": 3,
+      "text": "\"total\": 15,"
+    },
+    {
+      "source": "summary.json",
+      "line": 4,
+      "text": "\"passed\": 15,"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor for any regressions in scene object persistence across map boundaries in future runs.",
+  "risks_or_watchouts": [
+    "Scene-graph cache partitioning by map_id may cause cold-start misses when switching maps",
+    "Milvus-lite 3.x explicit load_collection may add latency on first access",
+    "YOLO device forcing may affect performance on GPU-stable hosts"
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-06T12:57:48+00:00"
+}
