@@ -1,0 +1,46 @@
+{
+  "title": "All 15 Webots scenarios passed",
+  "stage": "success",
+  "summary": "This CI run tested the merged PR #132 (\"FEAT: add more webots scenarios\") on the dev branch. All 15 scenarios across builtin, cap, and flow families passed with a 100% pass rate. The PR adds four new Webots worlds (apartment, break_room, complete_apartment, kitchen) and makes the simulation launch configurable via ROBONIX_WEBOTS_WORLD and ROBONIX_WEBOTS_ROBOT environment variables. The Dockerfile and entrypoint were updated to support these new worlds, and the ROS 2 launch file was modified to accept world and robot arguments.",
+  "pr_changes": [
+    "Added 4 new Webots world files: apartment.wbt, break_room.wbt, complete_apartment.wbt, kitchen.wbt",
+    "Added corresponding .wbproj and .jpg files for each new world",
+    "Modified examples/webots/sim/bridge/Dockerfile to improve Webots deb download robustness",
+    "Modified examples/webots/sim/bridge/entrypoint.sh to accept ROBONIX_WEBOTS_WORLD and ROBONIX_WEBOTS_ROBOT env vars",
+    "Modified examples/webots/sim/compose.yaml to pass ROBONIX_WEBOTS_WORLD and ROBONIX_WEBOTS_ROBOT env vars",
+    "Modified examples/webots/sim/ros_ws/src/eaios_webots/setup.py to use glob for launch and world files",
+    "Modified examples/webots/sim/start.sh to support --world and --robot CLI arguments",
+    "Updated docs subproject commit"
+  ],
+  "test_result": "The CI ran 15 scenarios: 4 builtin (fault_recovery_builtin, file_roundtrip, plan_control_builtins, run_command), 7 cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), and 4 flow (fault_recovery, object_navigation, patrol_observe). All passed. The explore skill timed out as expected (5s and 8s ceilings). Navigation succeeded. Scene perception detected objects (potted plant, robot).",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 54,
+      "text": "\"id\": \"missing_read\","
+    },
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 1324,
+      "text": "\"error\": \"mcp tool error: Error executing tool save: 1 validation error for saveArguments\\ndata\\n  Field required [type=missing, input_value={}, input_type=dict]\\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\""
+    }
+  ],
+  "suggested_fix": "No fix needed. All tests passed. Monitor the scene-graph-llm JSONDecodeError warnings (from fake-vlm) in future runs; they are expected with the fake VLM but may indicate issues if a real VLM is used.",
+  "risks_or_watchouts": [
+    "Scene graph LLM enrichment repeatedly fails with JSONDecodeError (fake-vlm returns empty response) – expected with fake VLM, but may mask real issues if VLM is replaced.",
+    "Explore skill times out due to missing map→base_link transform in the first attempt – this is expected behavior for the test scenario.",
+    "Voiceprint list returns 'db not initialised' – expected for a fresh CI environment.",
+    "New worlds (apartment, break_room, complete_apartment, kitchen) are added but not yet tested in CI scenarios – they may have issues with robot placement or sensor coverage."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-07T15:01:16+00:00"
+}

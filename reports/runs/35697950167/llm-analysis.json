@@ -1,0 +1,60 @@
+{
+  "title": "Webots suite did not start; no test data for run 35697950167",
+  "stage": "unknown",
+  "summary": "The Webots CI suite never started for run 35697950167 attempt 1, so there are zero scenarios and no pass/fail data. The only substantive activity captured is the build phase, which completed package builds and codegen successfully. The change set under test modifies the Webots viewer proxy server and an Astra camera proto mesh URL. Because no simulator, scene, or scenario containers exist, no runtime behavior of these changes was exercised.",
+  "pr_changes": [
+    "examples/webots/sim/bridge/viewer_server.py: MeshLoader.js patching extended to redirect webots:// mesh URLs through window.location.origin + '/github/' and to rewrite raw.githubusercontent.com URLs to the local /github/ proxy, plus a guard for undefined worldsPath (11 additions, 1 deletion).",
+    "examples/webots/sim/bridge/viewer_server.py: proxy_github URL candidate order changed so gh-proxy.com and ghfast.top are tried before the GITHUB_CDN and jsdelivr fallbacks.",
+    "examples/webots/sim/ros_ws/src/eaios_webots/protos/AstraRegistered.proto: mesh URL path corrected from projects/devices/orbbec/meshes/astra.obj to projects/devices/orbbec/protos/meshes/astra.obj."
+  ],
+  "test_result": "No Webots test was exercised. The summary reports 0/0 scenarios and NO DATA, and infrastructure.txt states the Webots suite has not started for this run. Container inspection logs show no such objects for sim, scene, nav2, mapping, or explore containers, and webots.version.txt failed because the sim container does not exist. The build log shows package fetch, codegen, and build steps completing for the declared packages.",
+  "likely_root_cause": "Not a test failure: the Webots suite was never launched for this run, so no root cause can be attributed to the code changes. The absence of the sim container and the 'no such object' errors indicate the simulator stage did not run or was not provisioned.",
+  "evidence": [
+    {
+      "source": "dl/_temp/sim-logs/infrastructure.txt",
+      "line": 1,
+      "text": "Webots suite has not started for run 35697950167 attempt 1."
+    },
+    {
+      "source": "dl/robonix/robonix/testing/report/summary.md",
+      "line": 3,
+      "text": "**Result:** `NO DATA`"
+    },
+    {
+      "source": "dl/_temp/sim-logs/sim-container-image.txt",
+      "line": 2,
+      "text": "error: no such object: ci-35697950167-1-sim"
+    },
+    {
+      "source": "dl/_temp/sim-logs/webots.stdout.log",
+      "line": 1,
+      "text": "Error response from daemon: No such container: ci-35697950167-1-sim"
+    },
+    {
+      "source": "dl/_temp/sim-logs/caps.final.json",
+      "line": 1,
+      "text": "Error: connect to atlas at '127.0.0.1:19167'"
+    },
+    {
+      "source": "examples/webots/sim/bridge/viewer_server.py",
+      "line": 0,
+      "text": "MeshLoader.js patch adds /github/ redirect for webots:// and raw.githubusercontent.com URLs"
+    },
+    {
+      "source": "examples/webots/sim/ros_ws/src/eaios_webots/protos/AstraRegistered.proto",
+      "line": 0,
+      "text": "mesh url changed to projects/devices/orbbec/protos/meshes/astra.obj"
+    }
+  ],
+  "suggested_fix": "Re-run the Webots suite so the viewer proxy and Astra mesh URL changes are actually exercised; investigate why the sim container was never created (provisioning or stage gating) before drawing conclusions about the PR.",
+  "risks_or_watchouts": [
+    "The viewer_server.py proxy changes are untested in this run; the new gh-proxy.com/ghfast.top ordering and the /github/ rewrite could alter asset loading behavior.",
+    "The AstraRegistered.proto mesh path change is unverified at runtime; if the corrected path is wrong the camera mesh will fail to load.",
+    "The atlas connection refused error at 127.0.0.1:19167 suggests the surrounding stack was not up, consistent with the suite not starting."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-09-22T07:38:24+00:00"
+}

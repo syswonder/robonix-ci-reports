@@ -1,0 +1,42 @@
+{
+  "title": "✅ All 15 scenarios pass — soma primitive lifecycle hardened",
+  "stage": "success",
+  "summary": "This PR hardens the soma primitive lifecycle by adding `on_shutdown` handlers to audio_client_bridge, tiago_camera, and tiago_lidar drivers, improving shutdown robustness. It also refactors start.sh scripts to log driver output and wait for process completion, and fixes the atlas endpoint rewrite in launcher.rs to use a helper method. All 15 Webots CI scenarios passed, covering builtin executors, camera/lidar snapshots, explore, mapping, memory, speech, voiceprint, and multi-step flows like object navigation and patrol observe.",
+  "pr_changes": [
+    "Added `on_shutdown` handler to audio_client_bridge/main.py",
+    "Added `on_shutdown` handler to tiago_camera/driver.py",
+    "Refactored tiago_camera/scripts/start.sh to log driver output and wait for process",
+    "Improved tiago_chassis/driver.py shutdown error handling and logging",
+    "Refactored tiago_chassis/scripts/start.sh to log driver output and wait for process",
+    "Added `on_shutdown` handler to tiago_lidar/driver.py",
+    "Refactored tiago_lidar/scripts/start.sh to log driver output and wait for process",
+    "Changed liaison listen address from 127.0.0.1 to 0.0.0.0 in robonix_manifest.yaml",
+    "Refactored launcher.rs to use `provider_atlas_endpoint()` helper and added unit test",
+    "Changed liaison listen address from 127.0.0.1 to 0.0.0.0 in init.rs template"
+  ],
+  "test_result": "All 15 scenarios passed: 4 builtin (fault_recovery_builtin, file_roundtrip, plan_control_builtins, run_command), 8 cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), 3 flow (fault_recovery, object_navigation, patrol_observe). Coverage includes 20 capabilities across executor, camera, lidar, mapping, memory, navigation, speech, voiceprint, explore, and scene.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the new driver logging in start.sh for any unexpected output that could indicate issues.",
+  "risks_or_watchouts": [
+    "The new driver logging in start.sh may produce large log files; ensure log rotation is in place.",
+    "The `on_shutdown` handlers are minimal (return Ok()); verify they are actually called during graceful shutdown.",
+    "The liaison listen address change to 0.0.0.0 may expose the service on all interfaces; confirm this is intended."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-09T21:52:32+00:00"
+}

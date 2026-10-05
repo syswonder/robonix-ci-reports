@@ -1,0 +1,9 @@
+{
+  "total": 0,
+  "passed": 0,
+  "failed": 0,
+  "rate": 0,
+  "scenarios": [],
+  "coverage": [],
+  "infrastructure_note": "Runner GPU capacity gate failed before checkout: GPU 0 has 2478 MiB free; 4096 MiB is required."
+}

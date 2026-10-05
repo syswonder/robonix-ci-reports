@@ -1,0 +1,43 @@
+{
+  "title": "All 15 scenarios passed",
+  "stage": "success",
+  "summary": "All 15 Webots integration test scenarios passed (15/15, 100%). The PR fixes ROS contract compliance in the scene system by honoring Atlas QoS declarations, switches to a local OpenCLIP checkpoint to avoid Hugging Face metadata API calls, and adds offline-friendly Docker frontend and model caching. The CI exercised builtin, capability, and flow scenarios including camera/lidar snapshots, exploration, navigation, memory, speech, and scene object listing.",
+  "pr_changes": [
+    "system/scene/README.md: Document offline-friendly Docker frontend and model cache, update CLIP pretrained default to staged checkpoint",
+    "system/scene/docker/Dockerfile: Remove forced syntax directive, add ros-humble-rmw-cyclonedds-cpp, copy open_clip_pytorch_model.bin, use local checkpoint for open_clip",
+    "system/scene/docker/Dockerfile.jetson: Remove forced syntax directive, copy open_clip_pytorch_model.bin, use local checkpoint for open_clip",
+    "system/scene/scene_service/ingest/perception_concept_graphs.py: Change _DEFAULT_CLIP_PRETRAINED from symbolic name to local path",
+    "system/scene/scene_service/ingest/ros_subscribers.py: Replace hardcoded QoS with topic_qos_policy() that honors Atlas declarations; update lidar3d and odom topic contracts",
+    "system/scene/scene_service/service.py: Update lidar3d topic to robonix/primitive/lidar/lidar3d, odom topic to robonix/primitive/chassis/odom",
+    "system/scene/scripts/build.sh: Add fetch_hf_weight for OpenCLIP, support RBNX_HF_MIRROR, optional BUILDKIT_SYNTAX override, validate staged checkpoint in native build",
+    "system/scene/scripts/start.sh: Add ROBONIX_PROVIDER_BIND_HOST, ROBONIX_ADVERTISE_HOST, SCENE_ANNOTATIONS_DIR, CYCLONEDDS_URI env vars",
+    "system/scene/scripts/start_native.sh: Default SCENE_CLIP_PRETRAINED to staged checkpoint, validate it exists",
+    "system/scene/tests/test_build_offline_contract.py: New test for offline build contracts (Dockerfile frontend, local CLIP, HF mirror fallback)",
+    "system/scene/tests/test_ros_contract_qos.py: New test for ROS QoS policy function and canonical topic contracts"
+  ],
+  "test_result": "15/15 scenarios passed: 4 builtin (fault_recovery_builtin, file_roundtrip, plan_control_builtins, run_command), 8 cap (camera_snapshot, explore_smoke, lidar_snapshot, mapping_save, memory_roundtrip, scene_object_fixture, speech_speak, voiceprint_list), 3 flow (fault_recovery, object_navigation, patrol_observe). All exercised capabilities returned expected results.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the new offline build contracts and ROS QoS changes in future CI runs, especially if Atlas QoS profiles change.",
+  "risks_or_watchouts": [
+    "The new topic_qos_policy() function changes QoS for sensor streams from RELIABLE to BEST_EFFORT; ensure all publishers are compatible.",
+    "The lidar3d and odom topic paths changed; verify all dependent providers (mapping, nav2, explore) still resolve correctly.",
+    "OpenCLIP checkpoint download adds ~577 MB to build; ensure model cache is populated for offline builds."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-17T03:20:47+00:00"
+}

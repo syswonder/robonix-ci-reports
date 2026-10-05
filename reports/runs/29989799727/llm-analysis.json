@@ -1,0 +1,50 @@
+{
+  "title": "2/17 scenarios failed — memgraph MCP tools unreachable",
+  "stage": "scenario",
+  "summary": "The CI run tested 17 scenarios, passing 15 and failing 2. The two failures are both memgraph-related scenarios (memgraph_failure_lesson and memgraph_roundtrip) that failed because the expected MCP tools (robonix/service/memory/remember, hybrid_search, promote) were never dispatched — the test runner observed zero plan rounds for those steps. All other scenarios, including the existing memory_roundtrip (which uses the older memsearch backend), passed successfully. The memgraph service itself registered and became ACTIVE in the boot log, but the test harness could not invoke its tools.",
+  "pr_changes": [
+    "Added new memgraph service (services/memory/) with MCP tools: remember, hybrid_search, promote",
+    "Added new IDL files: Remember.srv, Search.srv, Compact.srv under capabilities/lib/memgraph/srv/",
+    "Added new capability TOML manifests: remember.v1.toml, hybrid_search.v1.toml, promote.v1.toml",
+    "Modified existing memory service IDLs (Save.srv, Search.srv, Compact.srv) to deprecate in favour of memgraph",
+    "Added Scene Hook auto-save in mcp_tools.py and ObjectWatchdog in object_watchdog.py",
+    "Added protobuf upgrade in scene Dockerfile",
+    "Added memgraph to robonix_manifest.yaml and uv.lock",
+    "Added test scenarios: memgraph_failure_lesson.yaml, memgraph_roundtrip.yaml"
+  ],
+  "test_result": "Webots CI booted all 12 components successfully, then ran 17 scenarios. 15 passed (builtins, camera, lidar, explore, mapping, memory_roundtrip, speech, voiceprint, fault_recovery, object_navigation, patrol_observe). 2 failed: memgraph_failure_lesson and memgraph_roundtrip — both reported 'steps[0] did not match any plan round from 0; expected contracts=[...]; observed no later plan rounds'.",
+  "likely_root_cause": "The memgraph MCP tools (remember, hybrid_search, promote) were registered with atlas and the service was ACTIVE, but the test harness could not dispatch calls to them. This may be because the test runner's capability discovery or MCP client routing did not pick up the new contracts, or because the memgraph service's MCP endpoint was not reachable from the test runner's network context.",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 2,"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 97,
+      "text": "RESULT: FAIL — 2/17: ['memgraph_failure_lesson', 'memgraph_roundtrip']"
+    },
+    {
+      "source": "caps.final.json",
+      "line": 0,
+      "text": "memgraph provider with remember, hybrid_search, promote contracts listed as ACTIVE"
+    },
+    {
+      "source": "rbnx-boot.log",
+      "line": 0,
+      "text": "memgraph ACTIVE (no driver)"
+    }
+  ],
+  "suggested_fix": "Verify that the memgraph MCP endpoint (http://127.0.0.1:47779/mcp/) is accessible from the test runner's network. Check that the test scenario YAML files reference the correct MCP tool names (memgraph.memgraph_remember, etc.) and that the test harness's capability discovery includes the new contracts. Consider adding a simple connectivity test (e.g., curl to the MCP endpoint) before running scenarios.",
+  "risks_or_watchouts": [
+    "The memgraph service may have a startup race condition — it became ACTIVE but its MCP tools might not have been fully initialized when scenarios started.",
+    "The test harness may need to be updated to discover and route to the new memgraph contracts.",
+    "Scene Hook auto-save and ObjectWatchdog may generate unexpected memory nodes that interfere with test expectations."
+  ],
+  "confidence": "medium",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-23T08:11:38+00:00"
+}
