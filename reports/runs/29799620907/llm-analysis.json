@@ -1,0 +1,56 @@
+{
+  "title": "All 15 Webots integration scenarios pass — CI runner isolation hardened",
+  "stage": "success",
+  "summary": "This PR hardens dev Webots CI runner isolation by adding concurrency groups, GPU capacity waiting, per-run-attempt resource naming, and a dedicated cleanup step. All 15 scenarios (builtin, cap, flow) passed both before and after a stack restart, covering camera, lidar, mapping, memory, navigation, speech, voiceprint, explore, scene, and executor builtins. The scene LLM enrichment logged repeated JSONDecodeErrors from the fake-vlm endpoint, but these are non-fatal warnings and did not affect test outcomes.",
+  "pr_changes": [
+    "Added concurrency group `robonix-webots-gpu-${{ inputs.gpu_id || vars.ROBONIX_CI_GPU_ID || '0' }}` with `cancel-in-progress: false` to prevent concurrent GPU test runs.",
+    "Introduced `RUN_ATTEMPT` and `RUN_KEY` environment variables to scope per-run-attempt resource names (containers, volumes, runtime directories).",
+    "Added `ROBONIX_CI_MIN_GPU_FREE_MIB` variable (default 4096) and a `Wait for runner GPU capacity` step that polls `nvidia-smi` for free memory before proceeding.",
+    "Set `VOICEPRINT_DEVICE=cpu` to keep build-time ECAPA verification off the GPU reserved for Webots and Scene.",
+    "Replaced `RUN_ID` with `RUN_KEY` in container names, project names, map IDs, and cleanup patterns to isolate per-attempt resources.",
+    "Removed the `Configure runner-local Robonix home` step and the explicit `ROBONIX_SIM_CONTAINER` env override in the restart step; now uses the `RUN_KEY`-based variable.",
+    "Added a `Clean runner-local run directory` step that validates and removes the runtime directory after the run.",
+    "Updated `testing/simulate_ci.py` to improve regex-based synthetic text generation for test assertions.",
+    "Added `--dimension-tolerance-cells` argument to `verify_scene_map_persistence.py` to allow small occupancy-grid dimension drift (default 2 cells)."
+  ],
+  "test_result": "All 15 scenarios passed (15/15, 100%) in both the initial run and after a stack restart. Coverage includes 20 capabilities across builtin executor tools, camera/lidar snapshots, mapping save, memory save/search, navigation, speech, voiceprint, explore, and scene object listing. The explore skill timed out as expected (5s and 8s ceilings), and the fault recovery scenarios correctly handled missing-file and missing-argument errors.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "dl/_temp/scenarios.restart.out",
+      "line": 85,
+      "text": "RESULT: PASS — 15/15"
+    },
+    {
+      "source": "dl/_temp/sim-logs/scene-map-persistence.txt",
+      "line": 0,
+      "text": "summary: 16/16 checks passed"
+    },
+    {
+      "source": "dl/_temp/sim-logs/ci-29799620907-scene.stdout.log",
+      "line": 371,
+      "text": "07-21 04:01:54.835  W scene                    [scene-graph-llm] request failed: JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+    }
+  ],
+  "suggested_fix": "Monitor the repeated `scene-graph-llm` JSONDecodeError warnings from the fake-vlm endpoint; they are non-fatal but may indicate a misconfiguration or timeout in the LLM enrichment loop. Consider adding a retry or fallback for LLM calls.",
+  "risks_or_watchouts": [
+    "Scene LLM enrichment logs repeated JSONDecodeError warnings from fake-vlm; these are non-fatal but should be investigated if they persist in production.",
+    "The explore skill's 'nav leg failed: leg timeout' warnings are expected given the short timeouts, but may indicate navigation tuning opportunities.",
+    "The new GPU capacity waiting step adds up to 5 minutes of polling; ensure the timeout is adequate for shared runners."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-21T04:03:05+00:00"
+}

@@ -1,0 +1,48 @@
+{
+  "title": "CI infrastructure failure — sim container unavailable",
+  "stage": "simulator",
+  "summary": "The CI run failed before any scenario could execute because the Webots simulation container (ci-29730473792-sim) could not be found. All dependent containers (explore, mapping, nav2, scene) also report 'No such container' errors. The capability test runner could not connect to the Atlas service at 127.0.0.1:19792. The PR adds a new memgraph memory service with CKG model, but the CI infrastructure issue prevented any testing of these changes.",
+  "pr_changes": [
+    "Added memgraph service directory with core pipeline modules (remember, retrieve, compact, observe, LLM search), storage backends (graph, tag index, vector store, image store), data types, and MCP interface.",
+    "Added new ROS service definitions for memgraph: Compact.srv, Remember.srv, Search.srv under capabilities/lib/memgraph/srv/.",
+    "Modified existing memory service definitions (Compact.srv, Remember.srv, Save.srv, Search.srv) to add deprecation notes and update namespace comments.",
+    "Added capability contract TOML files for hybrid_search, promote, and remember services.",
+    "Updated examples/webots/robonix_manifest.yaml to include memgraph service configuration.",
+    "Added test scenarios for memgraph round-trip and failure lesson retrieval.",
+    "Updated uv.lock to include robonix-memgraph dependency and upgraded grpcio from 1.80.0 to 1.81.1.",
+    "Modified system/scene/docker/Dockerfile to force protobuf upgrade.",
+    "Modified system/scene/scene_service/mcp_tools.py to add automatic observation saving to memgraph via Scene Hook.",
+    "Updated docs submodule pointer."
+  ],
+  "test_result": "No scenarios were executed. The CI runner attempted to start the Webots simulation container but received 'error: no such object: ci-29730473792-sim' for all containers. The caps.final.json log shows 'Error: connect to atlas at 127.0.0.1:19792' with 'Connection refused'. The summary report shows 'NO DATA' with 0/0 scenarios.",
+  "likely_root_cause": "The Webots simulation container (ci-29730473792-sim) was not built or was removed before the test stage. This is an infrastructure issue — the Docker daemon could not find the container, likely due to a failed build step or container lifecycle management problem in the CI pipeline.",
+  "evidence": [
+    {
+      "source": "dl/_temp/sim-logs/caps.final.json",
+      "line": 1,
+      "text": "Error: connect to atlas at '127.0.0.1:19792'"
+    },
+    {
+      "source": "dl/_temp/sim-logs/sim-container-image.txt",
+      "line": 2,
+      "text": "error: no such object: ci-29730473792-sim"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/report/summary.md",
+      "line": 3,
+      "text": "**Result:** `NO DATA`"
+    }
+  ],
+  "suggested_fix": "Investigate the CI pipeline's container build step for the Webots simulation image. Ensure the container is built and tagged correctly before the test stage. Check Docker daemon logs and CI runner configuration for any resource constraints or cleanup issues that may have removed the container prematurely.",
+  "risks_or_watchouts": [
+    "The memgraph service code changes are untested due to CI infrastructure failure.",
+    "The protobuf upgrade in the scene Dockerfile may cause compatibility issues with existing protobuf-dependent services.",
+    "The Scene Hook auto-save feature in mcp_tools.py could introduce latency or side effects in the list_objects flow.",
+    "The grpcio upgrade from 1.80.0 to 1.81.1 may require validation of gRPC service compatibility."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-07-20T09:14:21+00:00"
+}
