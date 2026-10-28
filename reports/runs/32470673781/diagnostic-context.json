@@ -1,0 +1,393 @@
+{
+  "schema_version": 1,
+  "purpose": "LLM-assisted CI diagnostic note for Robonix Webots integration tests",
+  "rules": [
+    "Use only this context; do not infer from unavailable repository files.",
+    "Do not decide pass/fail; status is determined by CI scripts.",
+    "Mention uncertainty when evidence is incomplete."
+  ],
+  "metadata": {
+    "actor": "enkerewpo",
+    "commit_url": "https://github.com/syswonder/robonix/commit/cec06ee874eace27dd622e6ce4685c971f04a9e4",
+    "env_arch": "x86_64",
+    "env_cpu_cores": "12",
+    "env_cpu_model": "AMD Ryzen 5 7600X 6-Core Processor",
+    "env_cuda_version": "13.0",
+    "env_docker_compose_version": "5.4.0",
+    "env_docker_version": "29.7.2",
+    "env_gpu_summary": "0, NVIDIA GeForce RTX 2060, 6144 MiB, 580.95.05",
+    "env_hostname": "dedsec-amd0",
+    "env_kernel": "Linux 6.12.101+deb13-amd64 x86_64 GNU/Linux",
+    "env_mem_total": "30Gi",
+    "env_nvidia_driver": "580.95.05",
+    "env_os_pretty_name": "Debian GNU/Linux 13 (trixie)",
+    "env_python_version": "Python 3.13.5",
+    "env_rbnx_version": "rbnx 0.1.0",
+    "env_ros_distro": "humble",
+    "env_ros_domain_id": "171",
+    "env_rustc_version": "rustc 1.95.0 (59807616e 2026-04-14)",
+    "env_sim_container": "ci-32470673781-sim",
+    "env_sim_image": "ci-32470673781-1-sim",
+    "env_webots_stream_port": "23781",
+    "env_webots_version": "webots package 2025a",
+    "env_webots_viewer_port": "24781",
+    "event": "workflow_dispatch",
+    "generated_on": "2026-08-21T10:46:04+00:00",
+    "origin_url": "https://github.com/syswonder/robonix",
+    "ref": "refs/heads/merge/dev-next-into-dev",
+    "repository": "syswonder/robonix",
+    "run_attempt": "1",
+    "run_id": "32470673781",
+    "run_url": "https://github.com/syswonder/robonix/actions/runs/32470673781",
+    "runner_arch": "X64",
+    "runner_name": "robonix-runner-workpc-debian13-temp",
+    "runner_os": "Linux",
+    "sha": "cec06ee874eace27dd622e6ce4685c971f04a9e4",
+    "tested_commit": "cec06ee874eace27dd622e6ce4685c971f04a9e4",
+    "tested_commit_author": "Yulong Han <wheatfox17@icloud.com>",
+    "tested_commit_date": "2026-08-21T16:11:09+08:00",
+    "tested_commit_subject": "fix(liaison): satisfy the newer clippy on constant-size chunks",
+    "triggered_by": "enkerewpo",
+    "triggering_actor": "enkerewpo",
+    "workflow": "Webots Integration Tests",
+    "report_id": "32470673781",
+    "pr_number": "",
+    "pr_title": "",
+    "pr_author": "",
+    "pr_url": "",
+    "pr_head_ref": "",
+    "pr_base_ref": "",
+    "pr_head_repo": "",
+    "pr_head_sha": "",
+    "pr_head_commit_url": "",
+    "test_ref": "refs/heads/merge/dev-next-into-dev"
+  },
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "rate": 0,
+    "scenarios": [],
+    "coverage": [],
+    "infrastructure_note": "No machine-readable scenario summary was produced; logs are still embedded below."
+  },
+  "change_set": {
+    "source": "git_show_tested_commit",
+    "strict_rule": "Summarize code changes only from pr_files or git_diff. Do not infer changes from logs, capability catalogs, provider names, repository layout, or existing files.",
+    "pr_files": [],
+    "git_diff": "fatal: bad object cec06ee874eace27dd622e6ce4685c971f04a9e4\n"
+  },
+  "logs": [
+    {
+      "path": "dl/_temp/rbnx-boot.log",
+      "name": "rbnx-boot.log",
+      "size": 1640,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 39,
+          "text": "Error: inline build of memory at /services/memsearch failed"
+        },
+        {
+          "line": 42,
+          "text": "    0: Failed to canonicalize package path /services/memsearch"
+        }
+      ],
+      "content": "\n    ____        __                 _      \n   / __ \\____  / /_  ____  ____  (_)  __ \n  / /_/ / __ \\/ __ \\/ __ \\/ __ \\/ / |/_/\n / _, _/ /_/ / /_/ / /_/ / / / / />  <   \n/_/ |_|\\____/_.___/\\____/_/ /_/_/_/|_|   \n        Embodied AI Operating System\n\n  version:  v0.1.0 (cec06ee)\n  built:    2026-08-21T18:16:15+0800 on wheatfox@dedsec-amd0\n  compiler: rustc 1.95.0 (59807616e 2026-04-14)\n  target:   x86_64-unknown-linux-gnu\n\n[   0.000] booting robonix-webots-example-deploy\n[   0.000] manifest /home/wheatfox/actions-runner-robonix-temp/_work/robonix/robonix/examples/webots/robonix_manifest.ci.generated.yaml\n\r\u001b[K\n[   0.001] :: checking remote providers for updates (skip: --no-update-check) ::\n\r\u001b[K[   0.002] [ ⠋ ]  audio_driver        fetching origin…\r\u001b[K[   1.744] [ OK ]  audio_driver        up to date\n\r\u001b[K[   1.745] [ ⠋ ]  audio_client_bridge  fetching origin…\r\u001b[K[   3.157] [ OK ]  audio_client_bridge  up to date\n\r\u001b[K[   3.158] [ ⠋ ]  mapping             fetching origin…\r\u001b[K[   4.911] [ OK ]  mapping             up to date\n\r\u001b[K[   4.912] [ ⠋ ]  nav2                fetching origin…\r\u001b[K[   6.720] [ OK ]  nav2                up to date\n\r\u001b[K[   6.721] [ ⠋ ]  explore             fetching origin…\r\u001b[K[   8.472] [ OK ]  explore             up to date\n    5 remote provider(s) up to date — nothing to update\n\r\u001b[K\n[   8.473] :: prerequisites ::\n⚠ memory: not built — `rbnx build` should run before `rbnx boot`. building inline.\nError: inline build of memory at /services/memsearch failed\n\nCaused by:\n    0: Failed to canonicalize package path /services/memsearch\n    1: No such file or directory (os error 2)\n"
+    },
+    {
+      "path": "dl/_temp/cache-provider-logs/primitive-audio-client-bridge-rbnx/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 206,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-08-21 18:16:57.526098071\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:16:57.780281933\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/cache-provider-logs/primitive-audio-driver-rbnx/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 206,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-08-21 18:16:56.804234492\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:16:57.055696943\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/cache-provider-logs/service-map-rbnx/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 412,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-08-21 18:17:18.256576194\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:17:18.287516438\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:17:18.504450874\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:17:18.505551034\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/cache-provider-logs/service-navigation-rbnx/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 309,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-08-21 18:19:38.816591692\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:19:38.846901955\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:19:39.069379923\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/cache-provider-logs/skill-explore-rbnx/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 309,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-08-21 18:21:24.693033641\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:21:24.724291605\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:21:24.972687775\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/caps.final.json",
+      "name": "caps.final.json",
+      "size": 223,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 1,
+          "text": "Error: connect to atlas at '127.0.0.1:19781'"
+        }
+      ],
+      "content": "Error: connect to atlas at '127.0.0.1:19781'\n\nCaused by:\n    0: connect to Atlas at 'http://127.0.0.1:19781'\n    1: transport error\n    2: tcp connect error\n    3: tcp connect error\n    4: Connection refused (os error 111)\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-32470673781-1-explore.inspect.json",
+      "name": "ci-32470673781-1-explore.inspect.json",
+      "size": 51,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-32470673781-1-explore"
+        }
+      ],
+      "content": "[]\nerror: no such object: ci-32470673781-1-explore\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-32470673781-1-explore.stdout.log",
+      "name": "ci-32470673781-1-explore.stdout.log",
+      "size": 72,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-32470673781-1-explore\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-32470673781-1-mapping.inspect.json",
+      "name": "ci-32470673781-1-mapping.inspect.json",
+      "size": 51,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-32470673781-1-mapping"
+        }
+      ],
+      "content": "[]\nerror: no such object: ci-32470673781-1-mapping\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-32470673781-1-mapping.stdout.log",
+      "name": "ci-32470673781-1-mapping.stdout.log",
+      "size": 72,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-32470673781-1-mapping\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-32470673781-1-nav2.inspect.json",
+      "name": "ci-32470673781-1-nav2.inspect.json",
+      "size": 48,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-32470673781-1-nav2"
+        }
+      ],
+      "content": "[]\nerror: no such object: ci-32470673781-1-nav2\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-32470673781-1-nav2.stdout.log",
+      "name": "ci-32470673781-1-nav2.stdout.log",
+      "size": 69,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-32470673781-1-nav2\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-32470673781-1-scene.inspect.json",
+      "name": "ci-32470673781-1-scene.inspect.json",
+      "size": 49,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-32470673781-1-scene"
+        }
+      ],
+      "content": "[]\nerror: no such object: ci-32470673781-1-scene\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-32470673781-1-scene.stdout.log",
+      "name": "ci-32470673781-1-scene.stdout.log",
+      "size": 70,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-32470673781-1-scene\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/2026-08-21-10-35-58-794320-66328e89ab7b-93/launch.log",
+      "name": "launch.log",
+      "size": 909,
+      "truncated": false,
+      "important_lines": [],
+      "content": "1787308558.7947638 [INFO] [launch]: All log files can be found below /root/.ros/log/2026-08-21-10-35-58-794320-66328e89ab7b-93\n1787308558.7948263 [INFO] [launch]: Default logging verbosity is set to INFO\n1787308558.8339097 [INFO] [webots-1]: process started with pid [95]\n1787308558.8339987 [INFO] [ros2_supervisor.py-2]: process started with pid [97]\n1787308558.8340478 [INFO] [robot_state_publisher-3]: process started with pid [99]\n1787308558.8340929 [INFO] [static_transform_publisher-4]: process started with pid [101]\n1787308558.8341298 [INFO] [webots_controller_my_robot-5]: process started with pid [105]\n1787308563.0254023 [INFO] [spawner-6]: process started with pid [214]\n1787308563.0254745 [INFO] [spawner-7]: process started with pid [216]\n1787308563.3100271 [INFO] [spawner-6]: process has finished cleanly [pid 214]\n1787308563.3329060 [INFO] [spawner-7]: process has finished cleanly [pid 216]\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/driver_153_1787308562929.log",
+      "name": "driver_153_1787308562929.log",
+      "size": 1215,
+      "truncated": false,
+      "important_lines": [],
+      "content": "[INFO] [1787308563.020105279] [resource_manager]: Initialize hardware 'WebotsControl' \n[INFO] [1787308563.020202209] [resource_manager]: Successful initialization of hardware 'WebotsControl'\n[INFO] [1787308563.020225329] [resource_manager]: 'configure' hardware 'WebotsControl' \n[INFO] [1787308563.020230649] [resource_manager]: Successful 'configure' of hardware 'WebotsControl'\n[INFO] [1787308563.020233939] [resource_manager]: 'activate' hardware 'WebotsControl' \n[INFO] [1787308563.020237279] [resource_manager]: Successful 'activate' of hardware 'WebotsControl'\n[INFO] [1787308563.023688970] [my_robot]: Controller successfully connected to robot in Webots simulation.\n[INFO] [1787308563.175758107] [controller_manager]: Loading controller 'diffdrive_controller'\n[INFO] [1787308563.191516124] [controller_manager]: Loading controller 'joint_state_broadcaster'\n[INFO] [1787308563.208358472] [controller_manager]: Configuring controller 'diffdrive_controller'\n[INFO] [1787308563.226462100] [controller_manager]: Configuring controller 'joint_state_broadcaster'\n[INFO] [1787308563.226516490] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/python3_214_1787308563158.log",
+      "name": "python3_214_1787308563158.log",
+      "size": 224,
+      "truncated": false,
+      "important_lines": [],
+      "content": "[INFO] [1787308563.201999479] [spawner_diffdrive_controller]: \u001b[94mLoaded \u001b[1mdiffdrive_controller\u001b[0m\n[INFO] [1787308563.288336307] [spawner_diffdrive_controller]: \u001b[92mConfigured and activated \u001b[1mdiffdrive_controller\u001b[0m\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/python3_216_1787308563156.log",
+      "name": "python3_216_1787308563156.log",
+      "size": 236,
+      "truncated": false,
+      "important_lines": [],
+      "content": "[INFO] [1787308563.218938046] [spawner_joint_state_broadcaster]: \u001b[94mLoaded \u001b[1mjoint_state_broadcaster\u001b[0m\n[INFO] [1787308563.311389097] [spawner_joint_state_broadcaster]: \u001b[92mConfigured and activated \u001b[1mjoint_state_broadcaster\u001b[0m\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/python3_32_1787308558341.log",
+      "name": "python3_32_1787308558341.log",
+      "size": 0,
+      "truncated": false,
+      "important_lines": [],
+      "content": ""
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/python3_57_1787308558450.log",
+      "name": "python3_57_1787308558450.log",
+      "size": 0,
+      "truncated": false,
+      "important_lines": [],
+      "content": ""
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/python3_97_1787308558991.log",
+      "name": "python3_97_1787308558991.log",
+      "size": 0,
+      "truncated": false,
+      "important_lines": [],
+      "content": ""
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/robot_state_publisher_99_1787308558842.log",
+      "name": "robot_state_publisher_99_1787308558842.log",
+      "size": 2322,
+      "truncated": false,
+      "important_lines": [],
+      "content": "[INFO] [1787308558.863098935] [robot_state_publisher]: got segment \n[INFO] [1787308562.965634565] [robot_state_publisher]: got segment Astra\n[INFO] [1787308562.965662365] [robot_state_publisher]: got segment Astra depth\n[INFO] [1787308562.965665865] [robot_state_publisher]: got segment Astra rgb\n[INFO] [1787308562.965668455] [robot_state_publisher]: got segment Torso\n[INFO] [1787308562.965671175] [robot_state_publisher]: got segment accelerometer\n[INFO] [1787308562.965673755] [robot_state_publisher]: got segment base_cover_link\n[INFO] [1787308562.965676115] [robot_state_publisher]: got segment base_footprint\n[INFO] [1787308562.965678375] [robot_state_publisher]: got segment base_link\n[INFO] [1787308562.965680865] [robot_state_publisher]: got segment base_sonar_01_link\n[INFO] [1787308562.965683245] [robot_state_publisher]: got segment base_sonar_02_link\n[INFO] [1787308562.965685565] [robot_state_publisher]: got segment base_sonar_03_link\n[INFO] [1787308562.965687935] [robot_state_publisher]: got segment caster_back_left_1_link\n[INFO] [1787308562.965690485] [robot_state_publisher]: got segment caster_back_left_2_link\n[INFO] [1787308562.965692875] [robot_state_publisher]: got segment caster_back_right_1_link\n[INFO] [1787308562.965695105] [robot_state_publisher]: got segment caster_back_right_2_link\n[INFO] [1787308562.965697415] [robot_state_publisher]: got segment caster_front_left_1_link\n[INFO] [1787308562.965700145] [robot_state_publisher]: got segment caster_front_left_2_link\n[INFO] [1787308562.965702705] [robot_state_publisher]: got segment caster_front_right_1_link\n[INFO] [1787308562.965705105] [robot_state_publisher]: got segment caster_front_right_2_link\n[INFO] [1787308562.965707405] [robot_state_publisher]: got segment gyro\n[INFO] [1787308562.965709845] [robot_state_publisher]: got segment head_1_link\n[INFO] [1787308562.965712145] [robot_state_publisher]: got segment head_2_link\n[INFO] [1787308562.965714385] [robot_state_publisher]: got segment hokuyo\n[INFO] [1787308562.965716655] [robot_state_publisher]: got segment inertial unit\n[INFO] [1787308562.965719035] [robot_state_publisher]: got segment torso_lift_link\n[INFO] [1787308562.965721385] [robot_state_publisher]: got segment wheel_left_link\n[INFO] [1787308562.965723655] [robot_state_publisher]: got segment wheel_right_link\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/log/static_transform_publisher_101_1787308558843.log",
+      "name": "static_transform_publisher_101_1787308558843.log",
+      "size": 374,
+      "truncated": false,
+      "important_lines": [],
+      "content": "[WARN] [1787308558.843339326] []: Old-style arguments are deprecated; see --help for new-style arguments\n[INFO] [1787308558.847393938] [static_transform_publisher_U85W7VY69wIdkX40]: Spinning until stopped - publishing transform\ntranslation: ('0.000000', '0.000000', '0.000000')\nrotation: ('0.000000', '0.000000', '0.000000', '1.000000')\nfrom 'base_link' to 'base_footprint'\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/sim-container-image.txt",
+      "name": "sim-container-image.txt",
+      "size": 21,
+      "truncated": false,
+      "important_lines": [],
+      "content": "ci-32470673781-1-sim\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/webots.stdout.log",
+      "name": "webots.stdout.log",
+      "size": 8895,
+      "truncated": false,
+      "important_lines": [],
+      "content": "[entrypoint] picked GPU 0 (free=5332 MiB, 00000000:01:00.0) -> Xorg BusID=PCI:1:0:0\r\n\r\nX.Org X Server 1.21.1.4\r\nX Protocol Version 11, Revision 0\r\nCurrent Operating System: Linux 66328e89ab7b 6.12.101+deb13-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.12.101-1 (2026-08-05) x86_64\r\nKernel command line: BOOT_IMAGE=/boot/vmlinuz-6.12.101+deb13-amd64 root=UUID=80f8f96c-72bb-4911-9cca-eac26c73a702 ro quiet\r\nxorg-server 2:21.1.4-2ubuntu1.7~22.04.16 (For technical support please see http://www.ubuntu.com/support) \r\nCurrent version of pixman: 0.40.0\r\n\tBefore reporting problems, check http://wiki.x.org\r\n\tto make sure that you have the latest version.\r\nMarkers: (--) probed, (**) from config file, (==) default setting,\r\n\t(++) from command line, (!!) notice, (II) informational,\r\n\t(WW) warning, (EE) error, (NI) not implemented, (??) unknown.\r\n(++) Log file: \"/tmp/Xorg.1781.log\", Time: Fri Aug 21 10:35:57 2026\r\n(++) Using config file: \"/tmp/xorg-nvidia.conf\"\r\n(==) Using system config directory \"/usr/share/X11/xorg.conf.d\"\r\n[entrypoint] Xorg :1781 up, renderer=NVIDIA GeForce RTX 2060/PCIe/SSE2\r\n[entrypoint] rmw_zenohd pid=78\r\n[entrypoint] rmw_zenohd listening on tcp/127.0.0.1:7447\r\n[entrypoint] Webots office seed already present (webots-office-seed-v3)\r\n[entrypoint] viewer HTTP on :24781, optimized WebSocket on :23781, raw Webots stream on :1234\r\n[entrypoint] Webots world: office.wbt\r\n[entrypoint] TIAGo variant: lite\r\n[entrypoint] materialized world: /colcon_ws/src/eaios_webots/worlds/office.wbt\r\n[entrypoint] robot URDF: tiago_webots.urdf\r\n[entrypoint] eaios_webots pid=93\r\n[INFO] [launch]: All log files can be found below /root/.ros/log/2026-08-21-10-35-58-794320-66328e89ab7b-93\r\n[INFO] [launch]: Default logging verbosity is set to INFO\r\nusing robot_path:PathJoinSubstitution(''/colcon_ws/install/eaios_webots/share/eaios_webots', 'resource', LaunchConfig('robot')')\r\nusing world_path:/colcon_ws/src/eaios_webots/worlds/office.wbt\r\nWARNING: No valid Webots directory specified in `ROS2_WEBOTS_HOME` and `WEBOTS_HOME`, fallback to default installation folder /usr/local/webots.\r\n[INFO] [webots-1]: process started with pid [95]\r\n[INFO] [ros2_supervisor.py-2]: process started with pid [97]\r\n[INFO] [robot_state_publisher-3]: process started with pid [99]\r\n[INFO] [static_transform_publisher-4]: process started with pid [101]\r\n[INFO] [webots_controller_my_robot-5]: process started with pid [105]\r\n[static_transform_publisher-4] [WARN] [1787308558.843339326] []: Old-style arguments are deprecated; see --help for new-style arguments\r\n[static_transform_publisher-4] [INFO] [1787308558.847393938] [static_transform_publisher_U85W7VY69wIdkX40]: Spinning until stopped - publishing transform\r\n[static_transform_publisher-4] translation: ('0.000000', '0.000000', '0.000000')\r\n[static_transform_publisher-4] rotation: ('0.000000', '0.000000', '0.000000', '1.000000')\r\n[static_transform_publisher-4] from 'base_link' to 'base_footprint'\r\n[robot_state_publisher-3] [INFO] [1787308558.863098935] [robot_state_publisher]: got segment \r\n[webots_controller_my_robot-5] The specified robot (at /tmp/webots/root/1234/ipc/my_robot/extern) is not in the list of robots with <extern> controllers, retrying for another 50 seconds...\r\n[ros2_supervisor.py-2] The specified robot (at /tmp/webots/root/1234/ipc/Ros2Supervisor/extern) is not in the list of robots with <extern> controllers, retrying for another 50 seconds...\r\n[robot_state_publisher-3] [INFO] [1787308562.965634565] [robot_state_publisher]: got segment Astra\r\n[robot_state_publisher-3] [INFO] [1787308562.965662365] [robot_state_publisher]: got segment Astra depth\r\n[robot_state_publisher-3] [INFO] [1787308562.965665865] [robot_state_publisher]: got segment Astra rgb\r\n[robot_state_publisher-3] [INFO] [1787308562.965668455] [robot_state_publisher]: got segment Torso\r\n[robot_state_publisher-3] [INFO] [1787308562.965671175] [robot_state_publisher]: got segment accelerometer\r\n[robot_state_publisher-3] [INFO] [1787308562.965673755] [robot_state_publisher]: got segment base_cover_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965676115] [robot_state_publisher]: got segment base_footprint\r\n[robot_state_publisher-3] [INFO] [1787308562.965678375] [robot_state_publisher]: got segment base_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965680865] [robot_state_publisher]: got segment base_sonar_01_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965683245] [robot_state_publisher]: got segment base_sonar_02_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965685565] [robot_state_publisher]: got segment base_sonar_03_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965687935] [robot_state_publisher]: got segment caster_back_left_1_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965690485] [robot_state_publisher]: got segment caster_back_left_2_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965692875] [robot_state_publisher]: got segment caster_back_right_1_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965695105] [robot_state_publisher]: got segment caster_back_right_2_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965697415] [robot_state_publisher]: got segment caster_front_left_1_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965700145] [robot_state_publisher]: got segment caster_front_left_2_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965702705] [robot_state_publisher]: got segment caster_front_right_1_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965705105] [robot_state_publisher]: got segment caster_front_right_2_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965707405] [robot_state_publisher]: got segment gyro\r\n[robot_state_publisher-3] [INFO] [1787308562.965709845] [robot_state_publisher]: got segment head_1_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965712145] [robot_state_publisher]: got segment head_2_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965714385] [robot_state_publisher]: got segment hokuyo\r\n[robot_state_publisher-3] [INFO] [1787308562.965716655] [robot_state_publisher]: got segment inertial unit\r\n[robot_state_publisher-3] [INFO] [1787308562.965719035] [robot_state_publisher]: got segment torso_lift_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965721385] [robot_state_publisher]: got segment wheel_left_link\r\n[robot_state_publisher-3] [INFO] [1787308562.965723655] [robot_state_publisher]: got segment wheel_right_link\r\n[webots_controller_my_robot-5] [INFO] [1787308563.020105279] [resource_manager]: Initialize hardware 'WebotsControl' \r\n[webots_controller_my_robot-5] [INFO] [1787308563.020202209] [resource_manager]: Successful initialization of hardware 'WebotsControl'\r\n[webots_controller_my_robot-5] [INFO] [1787308563.020225329] [resource_manager]: 'configure' hardware 'WebotsControl' \r\n[webots_controller_my_robot-5] [INFO] [1787308563.020230649] [resource_manager]: Successful 'configure' of hardware 'WebotsControl'\r\n[webots_controller_my_robot-5] [INFO] [1787308563.020233939] [resource_manager]: 'activate' hardware 'WebotsControl' \r\n[webots_controller_my_robot-5] [INFO] [1787308563.020237279] [resource_manager]: Successful 'activate' of hardware 'WebotsControl'\r\n[webots_controller_my_robot-5] [INFO] [1787308563.023688970] [my_robot]: Controller successfully connected to robot in Webots simulation.\r\n[INFO] [spawner-6]: process started with pid [214]\r\n[INFO] [spawner-7]: process started with pid [216]\r\n[webots_controller_my_robot-5] [INFO] [1787308563.175758107] [controller_manager]: Loading controller 'diffdrive_controller'\r\n[webots_controller_my_robot-5] [INFO] [1787308563.191516124] [controller_manager]: Loading controller 'joint_state_broadcaster'\r\n[spawner-6] [INFO] [1787308563.201999479] [spawner_diffdrive_controller]: \u001b[94mLoaded \u001b[1mdiffdrive_controller\u001b[0m\r\n[webots_controller_my_robot-5] [INFO] [1787308563.208358472] [controller_manager]: Configuring controller 'diffdrive_controller'\r\n[spawner-7] [INFO] [1787308563.218938046] [spawner_joint_state_broadcaster]: \u001b[94mLoaded \u001b[1mjoint_state_broadcaster\u001b[0m\r\n[webots_controller_my_robot-5] [INFO] [1787308563.226462100] [controller_manager]: Configuring controller 'joint_state_broadcaster'\r\n[webots_controller_my_robot-5] [INFO] [1787308563.226516490] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published\r\n[spawner-6] [INFO] [1787308563.288336307] [spawner_diffdrive_controller]: \u001b[92mConfigured and activated \u001b[1mdiffdrive_controller\u001b[0m\r\n[INFO] [spawner-6]: process has finished cleanly [pid 214]\r\n[spawner-7] [INFO] [1787308563.311389097] [spawner_joint_state_broadcaster]: \u001b[92mConfigured and activated \u001b[1mjoint_state_broadcaster\u001b[0m\r\n[spawner-7] \u001b[2m2026-08-21T10:36:03.311957Z\u001b[0m \u001b[33m WARN\u001b[0m rx-1 ThreadId(08) \u001b[2mzenoh::api::session\u001b[0m\u001b[2m:\u001b[0m Received ResponseFinal for unknown Request: 3\r\n[INFO] [spawner-7]: process has finished cleanly [pid 216]\r\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/webots.version.txt",
+      "name": "webots.version.txt",
+      "size": 54,
+      "truncated": false,
+      "important_lines": [],
+      "content": "WEBOTS_VERSION=webots package 2025a\nROS_DISTRO=humble\n"
+    },
+    {
+      "path": "dl/robonix/robonix/examples/webots/rbnx-boot/logs/bootstrap.log",
+      "name": "bootstrap.log",
+      "size": 239,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-08-21 18:36:12.348404263\",\"level\":\"info\",\"tag\":\"bootstrap\",\"msg\":\"booting robonix-webots-example-deploy from /home/wheatfox/actions-runner-robonix-temp/_work/robonix/robonix/examples/webots/robonix_manifest.ci.generated.yaml\"}\n"
+    },
+    {
+      "path": "dl/robonix/robonix/system/scene/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 412,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-08-21 18:21:55.526824431\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:21:55.557113005\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:21:55.780019313\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n{\"ts\":\"2026-08-21 18:21:55.781161093\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/fake_vlm.log",
+      "name": "fake_vlm.log",
+      "size": 55,
+      "truncated": false,
+      "important_lines": [],
+      "content": "[fake-vlm] 16 scenario(s) on http://127.0.0.1:18781/v1\n"
+    },
+    {
+      "path": "dl/_temp/remote-provenance.txt",
+      "name": "remote-provenance.txt",
+      "size": 557,
+      "truncated": false,
+      "important_lines": [],
+      "content": "primitive-audio-client-bridge-rbnx @ 759e3b1 Merge pull request #1 from syswonder/agent/python-codegen-runtime-consistency\nprimitive-audio-driver-rbnx @ 6f7b46a Merge pull request #1 from syswonder/agent/python-codegen-runtime-consistency\nservice-map-rbnx @ 56e92e7 fix(mapping): sync active-db bookkeeping on partial load_map failure\nservice-navigation-rbnx @ 70e1f8e Merge pull request #12 from syswonder/fix/scan-clearing-and-blockage-diagnostics\nskill-explore-rbnx @ 40bdfa8 Merge pull request #4 from syswonder/agent/python-codegen-runtime-consistency\n"
+    },
+    {
+      "path": "dl/_temp/report-metadata.json",
+      "name": "report-metadata.json",
+      "size": 1922,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\n  \"actor\": \"enkerewpo\",\n  \"commit_url\": \"https://github.com/syswonder/robonix/commit/cec06ee874eace27dd622e6ce4685c971f04a9e4\",\n  \"env_arch\": \"x86_64\",\n  \"env_cpu_cores\": \"12\",\n  \"env_cpu_model\": \"AMD Ryzen 5 7600X 6-Core Processor\",\n  \"env_cuda_version\": \"13.0\",\n  \"env_docker_compose_version\": \"5.4.0\",\n  \"env_docker_version\": \"29.7.2\",\n  \"env_gpu_summary\": \"0, NVIDIA GeForce RTX 2060, 6144 MiB, 580.95.05\",\n  \"env_hostname\": \"dedsec-amd0\",\n  \"env_kernel\": \"Linux 6.12.101+deb13-amd64 x86_64 GNU/Linux\",\n  \"env_mem_total\": \"30Gi\",\n  \"env_nvidia_driver\": \"580.95.05\",\n  \"env_os_pretty_name\": \"Debian GNU/Linux 13 (trixie)\",\n  \"env_python_version\": \"Python 3.13.5\",\n  \"env_rbnx_version\": \"rbnx 0.1.0\",\n  \"env_ros_distro\": \"humble\",\n  \"env_ros_domain_id\": \"171\",\n  \"env_rustc_version\": \"rustc 1.95.0 (59807616e 2026-04-14)\",\n  \"env_sim_container\": \"ci-32470673781-sim\",\n  \"env_sim_image\": \"ci-32470673781-1-sim\",\n  \"env_webots_stream_port\": \"23781\",\n  \"env_webots_version\": \"webots package 2025a\",\n  \"env_webots_viewer_port\": \"24781\",\n  \"event\": \"workflow_dispatch\",\n  \"generated_on\": \"2026-08-21T10:46:04+00:00\",\n  \"origin_url\": \"https://github.com/syswonder/robonix\",\n  \"ref\": \"refs/heads/merge/dev-next-into-dev\",\n  \"repository\": \"syswonder/robonix\",\n  \"run_attempt\": \"1\",\n  \"run_id\": \"32470673781\",\n  \"run_url\": \"https://github.com/syswonder/robonix/actions/runs/32470673781\",\n  \"runner_arch\": \"X64\",\n  \"runner_name\": \"robonix-runner-workpc-debian13-temp\",\n  \"runner_os\": \"Linux\",\n  \"sha\": \"cec06ee874eace27dd622e6ce4685c971f04a9e4\",\n  \"tested_commit\": \"cec06ee874eace27dd622e6ce4685c971f04a9e4\",\n  \"tested_commit_author\": \"Yulong Han <wheatfox17@icloud.com>\",\n  \"tested_commit_date\": \"2026-08-21T16:11:09+08:00\",\n  \"tested_commit_subject\": \"fix(liaison): satisfy the newer clippy on constant-size chunks\",\n  \"triggered_by\": \"enkerewpo\",\n  \"triggering_actor\": \"enkerewpo\",\n  \"workflow\": \"Webots Integration Tests\"\n}\n"
+    },
+    {
+      "path": "dl/robonix/robonix/testing/report/metadata.json",
+      "name": "metadata.json",
+      "size": 2168,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\n  \"actor\": \"enkerewpo\",\n  \"commit_url\": \"https://github.com/syswonder/robonix/commit/cec06ee874eace27dd622e6ce4685c971f04a9e4\",\n  \"env_arch\": \"x86_64\",\n  \"env_cpu_cores\": \"12\",\n  \"env_cpu_model\": \"AMD Ryzen 5 7600X 6-Core Processor\",\n  \"env_cuda_version\": \"13.0\",\n  \"env_docker_compose_version\": \"5.4.0\",\n  \"env_docker_version\": \"29.7.2\",\n  \"env_gpu_summary\": \"0, NVIDIA GeForce RTX 2060, 6144 MiB, 580.95.05\",\n  \"env_hostname\": \"dedsec-amd0\",\n  \"env_kernel\": \"Linux 6.12.101+deb13-amd64 x86_64 GNU/Linux\",\n  \"env_mem_total\": \"30Gi\",\n  \"env_nvidia_driver\": \"580.95.05\",\n  \"env_os_pretty_name\": \"Debian GNU/Linux 13 (trixie)\",\n  \"env_python_version\": \"Python 3.13.5\",\n  \"env_rbnx_version\": \"rbnx 0.1.0\",\n  \"env_ros_distro\": \"humble\",\n  \"env_ros_domain_id\": \"171\",\n  \"env_rustc_version\": \"rustc 1.95.0 (59807616e 2026-04-14)\",\n  \"env_sim_container\": \"ci-32470673781-1-sim\",\n  \"env_sim_image\": \"ci-32470673781-1-sim\",\n  \"env_webots_stream_port\": \"23781\",\n  \"env_webots_version\": \"webots package 2025a\",\n  \"env_webots_viewer_port\": \"24781\",\n  \"event\": \"workflow_dispatch\",\n  \"generated_on\": \"2026-08-21T10:46:05+00:00\",\n  \"origin_url\": \"https://github.com/syswonder/robonix\",\n  \"pr_author\": \"\",\n  \"pr_base_ref\": \"\",\n  \"pr_head_commit_url\": \"\",\n  \"pr_head_ref\": \"\",\n  \"pr_head_repo\": \"\",\n  \"pr_head_sha\": \"\",\n  \"pr_number\": \"\",\n  \"pr_title\": \"\",\n  \"pr_url\": \"\",\n  \"ref\": \"refs/heads/merge/dev-next-into-dev\",\n  \"repository\": \"syswonder/robonix\",\n  \"run_attempt\": \"1\",\n  \"run_id\": \"32470673781\",\n  \"run_url\": \"https://github.com/syswonder/robonix/actions/runs/32470673781\",\n  \"runner_arch\": \"X64\",\n  \"runner_name\": \"robonix-runner-workpc-debian13-temp\",\n  \"runner_os\": \"Linux\",\n  \"sha\": \"cec06ee874eace27dd622e6ce4685c971f04a9e4\",\n  \"test_report_generated_on\": \"2026-08-21T10:46:04+00:00\",\n  \"tested_commit\": \"cec06ee874eace27dd622e6ce4685c971f04a9e4\",\n  \"tested_commit_author\": \"Yulong Han <wheatfox17@icloud.com>\",\n  \"tested_commit_date\": \"2026-08-21T16:11:09+08:00\",\n  \"tested_commit_subject\": \"fix(liaison): satisfy the newer clippy on constant-size chunks\",\n  \"triggered_by\": \"enkerewpo\",\n  \"triggering_actor\": \"enkerewpo\",\n  \"workflow\": \"Webots Integration Tests\"\n}\n"
+    },
+    {
+      "path": "dl/robonix/robonix/testing/report/summary.md",
+      "name": "summary.md",
+      "size": 260,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 3,
+          "text": "**Result:** `NO DATA`"
+        }
+      ],
+      "content": "## Robonix Webots CI\n\n**Result:** `NO DATA`\n**Scenarios:** `0/0`\n**Failures:** `0`\n\n| Status | Suite | Scenario | Rounds | Failures |\n| --- | --- | --- | ---: | --- |\n\nHTML report with embedded log viewer: `testing/report/index.html` in the uploaded artifact.\n"
+    }
+  ]
+}
