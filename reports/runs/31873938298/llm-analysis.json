@@ -1,0 +1,47 @@
+{
+  "title": "All 16 Webots scenarios passed",
+  "stage": "success",
+  "summary": "The CI run for PR #230 (fix(speech): split long Tencent TTS input) passed all 16 Webots scenarios. The change set modifies the speech service to split long Tencent TTS input into provider-safe segments, adds new configuration limits, and updates documentation and tests. The Webots simulation booted successfully, all components became active, and every scenario exercised its expected capabilities without failures.",
+  "pr_changes": [
+    "Modified services/speech/README.md to document new TENCENT_TTS_MAX_CHARS and TENCENT_TTS_MAX_TOTAL_CHARS options and PCM output contract.",
+    "Modified services/speech/docs/speech_service.proto.ref to reflect PCM output instead of MP3.",
+    "Modified services/speech/package_manifest.yaml to add tencent_tts_max_chars and tencent_tts_max_total_chars settings.",
+    "Modified services/speech/speech_service/service.py to add TTS cache limits, response metadata validation, and error handling for TTSInputError.",
+    "Modified services/speech/speech_service/tencent_cloud.py to add text splitting logic, segment synthesis, and validation of Tencent TTS limits.",
+    "Added services/speech/speech_service/tts_errors.py defining TTSInputError.",
+    "Added services/speech/speech_service/tts_runtime.py for request liveness tracking.",
+    "Modified services/speech/tests/test_speak_queue.py to add tests for long text segmentation.",
+    "Modified services/speech/tests/test_tencent_cloud.py to add tests for chunking, config validation, and error handling.",
+    "Added services/speech/tests/test_tts_servicers.py with tests for TTS servicers."
+  ],
+  "test_result": "Webots CI ran 16 scenarios covering navigation, exploration, mapping, memory, speech, and builtin tools. All 16 scenarios passed (rate 1.0). The simulation booted with 13 components active, and each scenario exercised its expected capabilities without failures. The speech_speak scenario confirmed the speech service works with the new changes.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "scenarios.out",
+      "line": 89,
+      "text": "RESULT: PASS — 16/16"
+    },
+    {
+      "source": "cap.speech_speak.jsonl",
+      "line": 0,
+      "text": "leaf_result: {\"ok\": true, \"detail\": \"spoke 35 chars on audio_driver\"}"
+    }
+  ],
+  "suggested_fix": "No fix needed. Monitor the new TTS splitting behavior in production, especially with very long or punctuation-heavy inputs, to ensure the safety limits are appropriate.",
+  "risks_or_watchouts": [
+    "The new TTS splitting may alter audio output for long texts; verify audio quality and latency in real deployments.",
+    "The TTS cache limits (16 entries, 64 MiB) may cause more frequent re-synthesis for large outputs; monitor cache hit rates.",
+    "The scene-graph LLM enrichment repeatedly failed with JSONDecodeError in logs, but this did not affect scenario outcomes; investigate if this is a known issue."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-08-15T08:26:13+00:00"
+}
