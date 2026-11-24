@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "purpose": "LLM-assisted CI diagnostic note for Robonix Webots integration tests",
+  "rules": [
+    "Use only this context; do not infer from unavailable repository files.",
+    "Do not decide pass/fail; status is determined by CI scripts.",
+    "Mention uncertainty when evidence is incomplete."
+  ],
+  "metadata": {
+    "actor": "enkerewpo",
+    "commit_url": "https://github.com/syswonder/robonix/commit/d6c004203d7beaf57fd9357109bb953aeceef177",
+    "env_arch": "x86_64",
+    "env_cpu_cores": "152",
+    "env_cpu_model": "Intel(R) Xeon(R) Platinum 8368Q CPU @ 2.60GHz",
+    "env_cuda_version": "13.0",
+    "env_docker_compose_version": "5.0.2",
+    "env_docker_version": "29.2.1",
+    "env_gpu_summary": "0, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;1, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;2, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;3, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02",
+    "env_hostname": "user-NF5468M6",
+    "env_kernel": "Linux 6.8.0-124-generic x86_64 GNU/Linux",
+    "env_mem_total": "125Gi",
+    "env_nvidia_driver": "580.173.02",
+    "env_os_pretty_name": "Ubuntu 22.04.5 LTS",
+    "env_python_version": "Python 3.10.12",
+    "env_rbnx_version": "rbnx 1.1.0-beta.1 (d6c00420 2026-10-20, built 2026-10-20, rustc 1.95.0, x86_64-unknown-linux-gnu)",
+    "env_ros_domain_id": "122",
+    "env_rustc_version": "rustc 1.95.0 (59807616e 2026-04-14)",
+    "env_sim_container": "ci-39372391832-sim",
+    "env_sim_image": "\nerror: no such object: ci-39372391832-1-cg-sim",
+    "env_webots_stream_port": "23832",
+    "env_webots_viewer_port": "24832",
+    "event": "workflow_dispatch",
+    "generated_on": "2026-10-20T05:03:12+00:00",
+    "origin_url": "https://github.com/syswonder/robonix",
+    "ref": "refs/heads/ci/runner-github-proxy",
+    "repository": "syswonder/robonix",
+    "run_attempt": "1",
+    "run_id": "39372391832",
+    "run_url": "https://github.com/syswonder/robonix/actions/runs/39372391832",
+    "runner_arch": "X64",
+    "runner_name": "robonix-runner-pku-rtx5090-x64",
+    "runner_os": "Linux",
+    "sha": "d6c004203d7beaf57fd9357109bb953aeceef177",
+    "tested_commit": "d6c004203d7beaf57fd9357109bb953aeceef177",
+    "tested_commit_author": "Yulong Han <wheatfox17@icloud.com>",
+    "tested_commit_date": "2026-10-20T12:45:29+08:00",
+    "tested_commit_subject": "ci(testing): try the runner's own GitHub proxy before the mirrors",
+    "triggered_by": "enkerewpo",
+    "triggering_actor": "enkerewpo",
+    "workflow": "Webots Integration Tests",
+    "report_id": "39372391832-cg",
+    "scene_backend": "concept_graphs",
+    "pr_number": "",
+    "pr_title": "",
+    "pr_author": "",
+    "pr_url": "",
+    "pr_head_ref": "",
+    "pr_base_ref": "",
+    "pr_head_repo": "",
+    "pr_head_sha": "",
+    "pr_head_commit_url": "",
+    "test_ref": "refs/heads/ci/runner-github-proxy"
+  },
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "rate": 0,
+    "scenarios": [],
+    "coverage": [],
+    "infrastructure_note": "Webots suite has not started for run 39372391832 attempt 1."
+  },
+  "change_set": {
+    "source": "git_show_tested_commit",
+    "strict_rule": "Summarize code changes only from pr_files or git_diff. Do not infer changes from logs, capability catalogs, provider names, repository layout, or existing files.",
+    "pr_files": [],
+    "git_diff": "fatal: bad object d6c004203d7beaf57fd9357109bb953aeceef177\n"
+  },
+  "logs": [
+    {
+      "path": "dl/_temp/cache-provider-logs/primitive-audio-client-bridge-rbnx/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 103,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-10-20 13:00:59.516320439\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/cache-provider-logs/primitive-audio-client-bridge-rbnx/rbnx-build/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 103,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-10-20 13:00:58.995872563\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/cache-provider-logs/primitive-audio-driver-rbnx/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 103,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-10-20 13:00:57.440775971\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/cache-provider-logs/primitive-audio-driver-rbnx/rbnx-build/logs/codegen.log",
+      "name": "codegen.log",
+      "size": 103,
+      "truncated": false,
+      "important_lines": [],
+      "content": "{\"ts\":\"2026-10-20 13:00:56.894466514\",\"level\":\"info\",\"tag\":\"codegen\",\"msg\":\"robonix-codegen starting\"}\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/build-webots-deployment.log",
+      "name": "build-webots-deployment.log",
+      "size": 20697,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 170,
+          "text": " + exceptiongroup==1.3.1"
+        },
+        {
+          "line": 286,
+          "text": " + exceptiongroup==1.3.1"
+        }
+      ],
+      "content": "[Building] packages declared in /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/robonix_manifest.yaml\n  -> fetch 5 package(s)\n    git clone https://github.com/syswonder/primitive-audio-driver-rbnx -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-driver-rbnx\nCloning into '/home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-driver-rbnx'...\n    git clone https://github.com/syswonder/primitive-audio-client-bridge-rbnx -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-client-bridge-rbnx\nCloning into '/home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-client-bridge-rbnx'...\n    git clone https://github.com/syswonder/service-map-rbnx -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/service-map-rbnx\nCloning into '/home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/service-map-rbnx'...\n    git clone https://github.com/syswonder/service-navigation-rbnx -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/service-navigation-rbnx\nCloning into '/home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/service-navigation-rbnx'...\n    git clone https://github.com/syswonder/skill-explore-rbnx -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/skill-explore-rbnx\nCloning into '/home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/skill-explore-rbnx'...\n  -> primitive tiago_chassis\n[Building] com.robonix.example.tiago_chassis via manifest.build\n[tiago_chassis/build] rbnx codegen --mcp\n[webots/codegen] preparing protobuf 6.33.6 / grpcio-tools 1.76.0\nUsing CPython 3.12.11\nCreating virtual environment at: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/python-codegen-venv\nActivate with: source /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/python-codegen-venv/bin/activate\nUsing Python 3.12.11 environment at: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/python-codegen-venv\nResolved 5 packages in 1.66s\nDownloading grpcio-tools (2.5MiB)\nDownloading grpcio (6.5MiB)\n Downloaded grpcio-tools\n Downloaded grpcio\nPrepared 4 packages in 6.24s\nInstalled 5 packages in 24ms\n + grpcio==1.80.0\n + grpcio-tools==1.76.0\n + protobuf==6.33.6\n + setuptools==84.2.0\n + typing-extensions==4.16.0\n[webots/codegen] rbnx codegen -p /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_chassis --mcp\n[codegen] package: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_chassis\n[codegen] robonix source: /home/hanyulong/actions-runner/_work/robonix/robonix\n[codegen] robonix-codegen --lang proto ...\n[robonix-codegen] proto: 45 packages, 209 msgs, 122 srv -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_chassis/rbnx-build/proto-staging\n[robonix-codegen] contracts: robonix_contracts.proto + contract_proto_modules.rs (under /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_chassis/rbnx-build/proto-staging)\n[codegen] robonix-codegen --lang mcp ...\n[robonix-codegen] mcp: 45 packages, 209 msgs -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_chassis/rbnx-build/codegen/robonix_mcp_types\n[codegen] Python: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/python-codegen-venv/bin/python (3.12.11)\n[codegen] grpc_tools.protoc → /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_chassis/rbnx-build/codegen/proto_gen\n[codegen] validated 88 generated Python modules\n[codegen] done — proto+mcp+stubs in /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_chassis/rbnx-build/codegen\n[webots/codegen] generated import smoke OK (133 modules)\n[tiago_chassis/build] done.\n✓ Package 'com.robonix.example.tiago_chassis' build finished\n  -> primitive tiago_camera\n[Building] com.robonix.example.tiago_camera via manifest.build\n[tiago_camera/build] rbnx codegen --mcp\n[webots/codegen] rbnx codegen -p /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_camera --mcp\n[codegen] package: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_camera\n[codegen] robonix source: /home/hanyulong/actions-runner/_work/robonix/robonix\n[codegen] robonix-codegen --lang proto ...\n[robonix-codegen] proto: 45 packages, 209 msgs, 122 srv -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_camera/rbnx-build/proto-staging\n[robonix-codegen] contracts: robonix_contracts.proto + contract_proto_modules.rs (under /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_camera/rbnx-build/proto-staging)\n[codegen] robonix-codegen --lang mcp ...\n[robonix-codegen] mcp: 45 packages, 209 msgs -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_camera/rbnx-build/codegen/robonix_mcp_types\n[codegen] Python: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/python-codegen-venv/bin/python (3.12.11)\n[codegen] grpc_tools.protoc → /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_camera/rbnx-build/codegen/proto_gen\n[codegen] validated 88 generated Python modules\n[codegen] done — proto+mcp+stubs in /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_camera/rbnx-build/codegen\n[webots/codegen] generated import smoke OK (133 modules)\n[tiago_camera/build] done.\n✓ Package 'com.robonix.example.tiago_camera' build finished\n  -> primitive tiago_lidar\n[Building] com.robonix.example.tiago_lidar via manifest.build\n[tiago_lidar/build] rbnx codegen --mcp\n[webots/codegen] rbnx codegen -p /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_lidar --mcp\n[codegen] package: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_lidar\n[codegen] robonix source: /home/hanyulong/actions-runner/_work/robonix/robonix\n[codegen] robonix-codegen --lang proto ...\n[robonix-codegen] proto: 45 packages, 209 msgs, 122 srv -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_lidar/rbnx-build/proto-staging\n[robonix-codegen] contracts: robonix_contracts.proto + contract_proto_modules.rs (under /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_lidar/rbnx-build/proto-staging)\n[codegen] robonix-codegen --lang mcp ...\n[robonix-codegen] mcp: 45 packages, 209 msgs -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_lidar/rbnx-build/codegen/robonix_mcp_types\n[codegen] Python: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/python-codegen-venv/bin/python (3.12.11)\n[codegen] grpc_tools.protoc → /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_lidar/rbnx-build/codegen/proto_gen\n[codegen] validated 88 generated Python modules\n[codegen] done — proto+mcp+stubs in /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_lidar/rbnx-build/codegen\n[webots/codegen] generated import smoke OK (133 modules)\n[tiago_lidar/build] done.\n✓ Package 'com.robonix.example.tiago_lidar' build finished\n  -> primitive tiago_health\n[Building] com.robonix.example.tiago_health via manifest.build\n[tiago_health/build] rbnx codegen --mcp\n[webots/codegen] rbnx codegen -p /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_health --mcp\n[codegen] package: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_health\n[codegen] robonix source: /home/hanyulong/actions-runner/_work/robonix/robonix\n[codegen] robonix-codegen --lang proto ...\n[robonix-codegen] proto: 45 packages, 209 msgs, 122 srv -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_health/rbnx-build/proto-staging\n[robonix-codegen] contracts: robonix_contracts.proto + contract_proto_modules.rs (under /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_health/rbnx-build/proto-staging)\n[codegen] robonix-codegen --lang mcp ...\n[robonix-codegen] mcp: 45 packages, 209 msgs -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_health/rbnx-build/codegen/robonix_mcp_types\n[codegen] Python: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/python-codegen-venv/bin/python (3.12.11)\n[codegen] grpc_tools.protoc → /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_health/rbnx-build/codegen/proto_gen\n[codegen] validated 88 generated Python modules\n[codegen] done — proto+mcp+stubs in /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/primitives/tiago_health/rbnx-build/codegen\n[webots/codegen] generated import smoke OK (133 modules)\n[tiago_health/build] done.\n✓ Package 'com.robonix.example.tiago_health' build finished\n  -> primitive audio_driver\n[Building] robonix.primitive.audio.alsa via manifest.build\nUsing CPython 3.12.11\nCreating virtual environment at: rbnx-build/venv\nActivate with: source rbnx-build/venv/bin/activate\n[codegen] package: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-driver-rbnx\n[codegen] robonix source: /home/hanyulong/actions-runner/_work/robonix/robonix\n[codegen] robonix-codegen --lang proto ...\n[robonix-codegen] proto: 45 packages, 209 msgs, 122 srv -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-driver-rbnx/rbnx-build/proto-staging\n[robonix-codegen] contracts: robonix_contracts.proto + contract_proto_modules.rs (under /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-driver-rbnx/rbnx-build/proto-staging)\n[codegen] Python: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-driver-rbnx/rbnx-build/venv/bin/python (3.12.11)\n[codegen] grpc_tools.protoc → /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-driver-rbnx/rbnx-build/codegen/proto_gen\n[codegen] validated 88 generated Python modules\n[codegen] done — proto+stubs\n[build] imported 88 generated protobuf modules\n[build] done.\n✓ Package 'robonix.primitive.audio.alsa' build finished\n  -> primitive audio_client_bridge\n[Building] robonix.primitive.audio.client_bridge via manifest.build\nUsing CPython 3.12.11\nCreating virtual environment at: rbnx-build/venv\nActivate with: source rbnx-build/venv/bin/activate\n[codegen] package: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-client-bridge-rbnx\n[codegen] robonix source: /home/hanyulong/actions-runner/_work/robonix/robonix\n[codegen] robonix-codegen --lang proto ...\n[robonix-codegen] proto: 45 packages, 209 msgs, 122 srv -> /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-client-bridge-rbnx/rbnx-build/proto-staging\n[robonix-codegen] contracts: robonix_contracts.proto + contract_proto_modules.rs (under /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-client-bridge-rbnx/rbnx-build/proto-staging)\n[codegen] Python: /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-client-bridge-rbnx/rbnx-build/venv/bin/python (3.12.11)\n[codegen] grpc_tools.protoc → /home/hanyulong/actions-runner/_work/robonix/robonix/examples/webots/rbnx-boot/cache/primitive-audio-client-bridge-rbnx/rbnx-build/codegen/proto_gen\n[codegen] validated 88 generated Python modules\n[codegen] done — proto+stubs\n[build] imported 88 generated protobuf modules\n[build] done.\n✓ Package 'robonix.primitive.audio.client_bridge' build finished\n  -> service memgraph\n[Building] com.robonix.example.memgraph_service via manifest.build\n[build] uv → /home/hanyulong/.local/bin/uv (uv 0.11.26 (x86_64-unknown-linux-gnu))\n[build] uv venv → rbnx-build/venv\nUsing CPython 3.12.11\nCreating virtual environment at: rbnx-build/venv\nActivate with: source rbnx-build/venv/bin/activate\n[build] uv sync (pyproject.toml → rbnx-build/venv)\nUsing CPython 3.10.12 interpreter at: /usr/bin/python3\nRemoved virtual environment at: rbnx-build/venv\nCreating virtual environment at: rbnx-build/venv\nResolved 237 packages in 6ms\n   Building robonix-api @ file:///home/hanyulong/actions-runner/_work/robonix/robonix/pylib/robonix-api\n      Built robonix-api @ file:///home/hanyulong/actions-runner/_work/robonix/robonix/pylib/robonix-api\nPrepared 1 package in 917ms\nInstalled 78 packages in 31ms\n + aiofile==3.9.0\n + annotated-types==0.7.0\n + anyio==4.13.0\n + attrs==26.1.0\n + authlib==1.7.0\n + backports-tarfile==1.2.0\n + beartype==0.22.9\n + cachetools==7.0.6\n + caio==0.9.25\n + certifi==2026.4.22\n + cffi==2.0.0\n + click==8.3.3\n + cryptography==47.0.0\n + cyclopts==4.11.0\n + dnspython==2.8.0\n + docstring-parser==0.18.0\n + docutils==0.22.4\n + email-validator==2.3.0\n + exceptiongroup==1.3.1\n + fastmcp==3.2.4\n + griffelib==2.0.2\n + grpcio==1.80.0\n + grpcio-tools==1.76.0\n + h11==0.16.0\n + httpcore==1.0.9\n + httpx==0.28.1\n + httpx-sse==0.4.3\n + idna==3.13\n + importlib-metadata==8.7.1\n + jaraco-classes==3.4.0\n + jaraco-context==6.1.2\n + jaraco-functools==4.4.0\n + jeepney==0.9.0\n + joserfc==1.6.4\n + jsonref==1.1.0\n + jsonschema==4.26.0\n + jsonschema-path==0.4.5\n + jsonschema-specifications==2025.9.1\n + keyring==25.7.0\n + markdown-it-py==4.0.0\n + mcp==1.29.1\n + mdurl==0.1.2\n + more-itertools==11.0.2\n + numpy==1.26.4\n + openapi-pydantic==0.5.1\n + opentelemetry-api==1.41.1\n + packaging==26.2\n + pathable==0.5.0\n + platformdirs==4.9.6\n + protobuf==6.33.6\n + py-key-value-aio==0.4.4\n + pycparser==3.0\n + pydantic==2.13.3\n + pydantic-core==2.46.3\n + pydantic-settings==2.14.0\n + pygments==2.20.0\n + pyjwt==2.12.1\n + pyperclip==1.11.0\n + python-dotenv==1.2.2\n + python-multipart==0.0.26\n + pyyaml==6.0.3\n + referencing==0.37.0\n + rich==15.0.0\n + rich-rst==1.3.2\n + robonix-api==1.1.0b1 (from file:///home/hanyulong/actions-runner/_work/robonix/robonix/pylib/robonix-api)\n + rpds-py==0.30.0\n + secretstorage==3.5.0\n + setuptools==80.10.2\n + sse-starlette==3.3.4\n + starlette==1.0.0\n + tomli==2.4.1\n + typing-extensions==4.15.0\n + typing-inspection==0.4.2\n + uncalled-for==0.3.1\n + uvicorn==0.46.0\n + watchfiles==1.1.1\n + websockets==16.0\n + zipp==3.23.1\n[build] rbnx codegen --mcp\n[codegen] package: /home/hanyulong/actions-runner/_work/robonix/robonix/services/memory\n[codegen] robonix source: /home/hanyulong/actions-runner/_work/robonix/robonix\n[codegen] robonix-codegen --lang proto ...\n[robonix-codegen] proto: 45 packages, 209 msgs, 122 srv -> /home/hanyulong/actions-runner/_work/robonix/robonix/services/memory/rbnx-build/proto-staging\n[robonix-codegen] contracts: robonix_contracts.proto + contract_proto_modules.rs (under /home/hanyulong/actions-runner/_work/robonix/robonix/services/memory/rbnx-build/proto-staging)\n[codegen] robonix-codegen --lang mcp ...\n[robonix-codegen] mcp: 45 packages, 209 msgs -> /home/hanyulong/actions-runner/_work/robonix/robonix/services/memory/rbnx-build/codegen/robonix_mcp_types\n[codegen] Python: /home/hanyulong/actions-runner/_work/robonix/robonix/services/memory/rbnx-build/venv/bin/python (3.10.12)\n[codegen] grpc_tools.protoc → /home/hanyulong/actions-runner/_work/robonix/robonix/services/memory/rbnx-build/codegen/proto_gen\n[codegen] validated 88 generated Python modules\n[codegen] done — proto+mcp+stubs in /home/hanyulong/actions-runner/_work/robonix/robonix/services/memory/rbnx-build/codegen\n[build] generated Memory MCP imports OK\n[build] done.\n✓ Package 'com.robonix.example.memgraph_service' build finished\n  -> service memory\n[Building] com.robonix.example.memsearch_service via manifest.build\n[build] uv venv → rbnx-build/venv\nUsing CPython 3.12.11\nCreating virtual environment at: rbnx-build/venv\nActivate with: source rbnx-build/venv/bin/activate\n[build] uv sync (pyproject.toml → rbnx-build/venv)\nUsing CPython 3.10.12 interpreter at: /usr/bin/python3\nRemoved virtual environment at: rbnx-build/venv\nCreating virtual environment at: rbnx-build/venv\nResolved 237 packages in 2ms\nDownloading milvus-lite (52.7MiB)\nDownloading pandas (12.2MiB)\nDownloading openai (1.1MiB)\n Downloaded openai\n Downloaded pandas\n Downloaded milvus-lite\nPrepared 14 packages in 11.09s\nInstalled 111 packages in 59ms\n + aiofile==3.9.0\n + annotated-doc==0.0.4\n + annotated-types==0.7.0\n + anyio==4.13.0\n + attrs==26.1.0\n + authlib==1.7.0\n + backports-tarfile==1.2.0\n + beartype==0.22.9\n + cachetools==7.0.6\n + caio==0.9.25\n + certifi==2026.4.22\n + cffi==2.0.0\n + charset-normalizer==3.4.7\n + click==8.3.3\n + coloredlogs==15.0.1\n + cryptography==47.0.0\n + cyclopts==4.11.0\n + distro==1.9.0\n + dnspython==2.8.0\n + docstring-parser==0.18.0\n + docutils==0.22.4\n + email-validator==2.3.0\n + exceptiongroup==1.3.1\n + fastmcp==3.2.4\n + filelock==3.29.0\n + flatbuffers==25.12.19\n + fsspec==2026.3.0\n + griffelib==2.0.2\n + grpcio==1.80.0\n + grpcio-tools==1.76.0\n + h11==0.16.0\n + hf-xet==1.4.3\n + httpcore==1.0.9\n + httpx==0.28.1\n + httpx-sse==0.4.3\n + huggingface-hub==1.12.0\n + humanfriendly==10.0\n + idna==3.13\n + importlib-metadata==8.7.1\n + jaraco-classes==3.4.0\n + jaraco-context==6.1.2\n + jaraco-functools==4.4.0\n + jeepney==0.9.0\n + jiter==0.14.0\n + joserfc==1.6.4\n + jsonref==1.1.0\n + jsonschema==4.26.0\n + jsonschema-path==0.4.5\n + jsonschema-specifications==2025.9.1\n + keyring==25.7.0\n + markdown-it-py==4.0.0\n + mcp==1.29.1\n + mdurl==0.1.2\n + memsearch==0.4.11\n + milvus-lite==2.5.1\n + more-itertools==11.0.2\n + mpmath==1.3.0\n + numpy==1.26.4\n + onnxruntime==1.23.2\n + openai==2.32.0\n + openapi-pydantic==0.5.1\n + opentelemetry-api==1.41.1\n + orjson==3.11.8\n + packaging==26.2\n + pandas==2.3.3\n + pathable==0.5.0\n + platformdirs==4.9.6\n + protobuf==6.33.6\n + py-key-value-aio==0.4.4\n + pycparser==3.0\n + pydantic==2.13.3\n + pydantic-core==2.46.3\n + pydantic-settings==2.14.0\n + pygments==2.20.0\n + pyjwt==2.12.1\n + pymilvus==2.6.12\n + pyperclip==1.11.0\n + python-dateutil==2.9.0.post0\n + python-dotenv==1.2.2\n + python-multipart==0.0.26\n + pytz==2026.1.post1\n + pyyaml==6.0.3\n + referencing==0.37.0\n + requests==2.33.1\n + rich==15.0.0\n + rich-rst==1.3.2\n + robonix-api==1.1.0b1 (from file:///home/hanyulong/actions-runner/_work/robonix/robonix/pylib/robonix-api)\n + rpds-py==0.30.0\n + secretstorage==3.5.0\n + setuptools==80.10.2\n + shellingham==1.5.4\n + six==1.17.0\n + sniffio==1.3.1\n + sse-starlette==3.3.4\n + starlette==1.0.0\n + sympy==1.14.0\n + tokenizers==0.22.2\n + tomli==2.4.1\n + tomli-w==1.2.0\n + tqdm==4.67.3\n + typer==0.24.2\n + typing-extensions==4.15.0\n + typing-inspection==0.4.2\n + tzdata==2026.2\n + uncalled-for==0.3.1\n + urllib3==2.6.3\n + uvicorn==0.46.0\n + watchdog==6.0.0\n + watchfiles==1.1.1\n + websockets==16.0\n + zipp==3.23.1\n[build] rbnx codegen --mcp\n[codegen] package: /home/hanyulong/actions-runner/_work/robonix/robonix/services/memsearch\n[codegen] robonix source: /home/hanyulong/actions-runner/_work/robonix/robonix\n[codegen] robonix-codegen --lang proto ...\n[robonix-codegen] proto: 45 packages, 209 msgs, 122 srv -> /home/hanyulong/actions-runner/_work/robonix/robonix/services/memsearch/rbnx-build/proto-staging\n[robonix-codegen] contracts: robonix_contracts.proto + contract_proto_modules.rs (under /home/hanyulong/actions-runner/_work/robonix/robonix/services/memsearch/rbnx-build/proto-staging)\n[codegen] robonix-codegen --lang mcp ...\n[robonix-codegen] mcp: 45 packages, 209 msgs -> /home/hanyulong/actions-runner/_work/robonix/robonix/services/memsearch/rbnx-build/codegen/robonix_mcp_types\n[codegen] Python: /home/hanyulong/actions-runner/_work/robonix/robonix/services/memsearch/rbnx-build/venv/bin/python (3.10.12)\n[codegen] grpc_tools.protoc → /home/hanyulong/actions-runner/_work/robonix/robonix/services/memsearch/rbnx-build/codegen/proto_gen\n[codegen] validated 88 generated Python modules\n[codegen] done — proto+mcp+stubs in /home/hanyulong/actions-runner/_work/robonix/robonix/services/memsearch/rbnx-build/codegen\n[build] generated MemSearch MCP imports OK\n[build] warming ONNX embedding model (so start needs no network)\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/caps.final.json",
+      "name": "caps.final.json",
+      "size": 223,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 1,
+          "text": "Error: connect to atlas at '127.0.0.1:19832'"
+        }
+      ],
+      "content": "Error: connect to atlas at '127.0.0.1:19832'\n\nCaused by:\n    0: connect to Atlas at 'http://127.0.0.1:19832'\n    1: transport error\n    2: tcp connect error\n    3: tcp connect error\n    4: Connection refused (os error 111)\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-39372391832-1-cg-explore.inspect.json",
+      "name": "ci-39372391832-1-cg-explore.inspect.json",
+      "size": 54,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-39372391832-1-cg-explore"
+        }
+      ],
+      "content": "[]\nerror: no such object: ci-39372391832-1-cg-explore\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-39372391832-1-cg-explore.stdout.log",
+      "name": "ci-39372391832-1-cg-explore.stdout.log",
+      "size": 75,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-39372391832-1-cg-explore\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-39372391832-1-cg-mapping.inspect.json",
+      "name": "ci-39372391832-1-cg-mapping.inspect.json",
+      "size": 54,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-39372391832-1-cg-mapping"
+        }
+      ],
+      "content": "[]\nerror: no such object: ci-39372391832-1-cg-mapping\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-39372391832-1-cg-mapping.stdout.log",
+      "name": "ci-39372391832-1-cg-mapping.stdout.log",
+      "size": 75,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-39372391832-1-cg-mapping\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-39372391832-1-cg-nav2.inspect.json",
+      "name": "ci-39372391832-1-cg-nav2.inspect.json",
+      "size": 51,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-39372391832-1-cg-nav2"
+        }
+      ],
+      "content": "[]\nerror: no such object: ci-39372391832-1-cg-nav2\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-39372391832-1-cg-nav2.stdout.log",
+      "name": "ci-39372391832-1-cg-nav2.stdout.log",
+      "size": 72,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-39372391832-1-cg-nav2\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-39372391832-1-cg-scene.inspect.json",
+      "name": "ci-39372391832-1-cg-scene.inspect.json",
+      "size": 52,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-39372391832-1-cg-scene"
+        }
+      ],
+      "content": "[]\nerror: no such object: ci-39372391832-1-cg-scene\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/ci-39372391832-1-cg-scene.stdout.log",
+      "name": "ci-39372391832-1-cg-scene.stdout.log",
+      "size": 73,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-39372391832-1-cg-scene\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/infrastructure.txt",
+      "name": "infrastructure.txt",
+      "size": 60,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Webots suite has not started for run 39372391832 attempt 1.\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/sim-container-image.txt",
+      "name": "sim-container-image.txt",
+      "size": 48,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 2,
+          "text": "error: no such object: ci-39372391832-1-cg-sim"
+        }
+      ],
+      "content": "\nerror: no such object: ci-39372391832-1-cg-sim\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/webots.stdout.log",
+      "name": "webots.stdout.log",
+      "size": 71,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-39372391832-1-cg-sim\n"
+    },
+    {
+      "path": "dl/_temp/sim-logs/webots.version.txt",
+      "name": "webots.version.txt",
+      "size": 71,
+      "truncated": false,
+      "important_lines": [],
+      "content": "Error response from daemon: No such container: ci-39372391832-1-cg-sim\n"
+    },
+    {
+      "path": "dl/_temp/report-metadata.json",
+      "name": "report-metadata.json",
+      "size": 2112,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 21,
+          "text": "  \"env_sim_image\": \"\\nerror: no such object: ci-39372391832-1-cg-sim\","
+        }
+      ],
+      "content": "{\n  \"actor\": \"enkerewpo\",\n  \"commit_url\": \"https://github.com/syswonder/robonix/commit/d6c004203d7beaf57fd9357109bb953aeceef177\",\n  \"env_arch\": \"x86_64\",\n  \"env_cpu_cores\": \"152\",\n  \"env_cpu_model\": \"Intel(R) Xeon(R) Platinum 8368Q CPU @ 2.60GHz\",\n  \"env_cuda_version\": \"13.0\",\n  \"env_docker_compose_version\": \"5.0.2\",\n  \"env_docker_version\": \"29.2.1\",\n  \"env_gpu_summary\": \"0, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;1, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;2, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;3, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02\",\n  \"env_hostname\": \"user-NF5468M6\",\n  \"env_kernel\": \"Linux 6.8.0-124-generic x86_64 GNU/Linux\",\n  \"env_mem_total\": \"125Gi\",\n  \"env_nvidia_driver\": \"580.173.02\",\n  \"env_os_pretty_name\": \"Ubuntu 22.04.5 LTS\",\n  \"env_python_version\": \"Python 3.10.12\",\n  \"env_rbnx_version\": \"rbnx 1.1.0-beta.1 (d6c00420 2026-10-20, built 2026-10-20, rustc 1.95.0, x86_64-unknown-linux-gnu)\",\n  \"env_ros_domain_id\": \"122\",\n  \"env_rustc_version\": \"rustc 1.95.0 (59807616e 2026-04-14)\",\n  \"env_sim_container\": \"ci-39372391832-sim\",\n  \"env_sim_image\": \"\\nerror: no such object: ci-39372391832-1-cg-sim\",\n  \"env_webots_stream_port\": \"23832\",\n  \"env_webots_viewer_port\": \"24832\",\n  \"event\": \"workflow_dispatch\",\n  \"generated_on\": \"2026-10-20T05:03:12+00:00\",\n  \"origin_url\": \"https://github.com/syswonder/robonix\",\n  \"ref\": \"refs/heads/ci/runner-github-proxy\",\n  \"repository\": \"syswonder/robonix\",\n  \"run_attempt\": \"1\",\n  \"run_id\": \"39372391832\",\n  \"run_url\": \"https://github.com/syswonder/robonix/actions/runs/39372391832\",\n  \"runner_arch\": \"X64\",\n  \"runner_name\": \"robonix-runner-pku-rtx5090-x64\",\n  \"runner_os\": \"Linux\",\n  \"sha\": \"d6c004203d7beaf57fd9357109bb953aeceef177\",\n  \"tested_commit\": \"d6c004203d7beaf57fd9357109bb953aeceef177\",\n  \"tested_commit_author\": \"Yulong Han <wheatfox17@icloud.com>\",\n  \"tested_commit_date\": \"2026-10-20T12:45:29+08:00\",\n  \"tested_commit_subject\": \"ci(testing): try the runner's own GitHub proxy before the mirrors\",\n  \"triggered_by\": \"enkerewpo\",\n  \"triggering_actor\": \"enkerewpo\",\n  \"workflow\": \"Webots Integration Tests\"\n}\n"
+    },
+    {
+      "path": "dl/robonix/robonix/testing/report/metadata.json",
+      "name": "metadata.json",
+      "size": 2411,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 22,
+          "text": "  \"env_sim_image\": \"error: no such object: ci-39372391832-1-cg-sim\","
+        }
+      ],
+      "content": "{\n  \"actor\": \"enkerewpo\",\n  \"commit_url\": \"https://github.com/syswonder/robonix/commit/d6c004203d7beaf57fd9357109bb953aeceef177\",\n  \"env_arch\": \"x86_64\",\n  \"env_cpu_cores\": \"152\",\n  \"env_cpu_model\": \"Intel(R) Xeon(R) Platinum 8368Q CPU @ 2.60GHz\",\n  \"env_cuda_version\": \"13.0\",\n  \"env_docker_compose_version\": \"5.0.2\",\n  \"env_docker_version\": \"29.2.1\",\n  \"env_gpu_summary\": \"0, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;1, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;2, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02;3, NVIDIA GeForce RTX 5090, 32607 MiB, 580.173.02\",\n  \"env_hostname\": \"user-NF5468M6\",\n  \"env_kernel\": \"Linux 6.8.0-124-generic x86_64 GNU/Linux\",\n  \"env_mem_total\": \"125Gi\",\n  \"env_nvidia_driver\": \"580.173.02\",\n  \"env_os_pretty_name\": \"Ubuntu 22.04.5 LTS\",\n  \"env_python_version\": \"Python 3.10.12\",\n  \"env_rbnx_version\": \"rbnx 1.1.0-beta.1 (d6c00420 2026-10-20, built 2026-10-20, rustc 1.95.0, x86_64-unknown-linux-gnu)\",\n  \"env_ros_distro\": \"\",\n  \"env_ros_domain_id\": \"122\",\n  \"env_rustc_version\": \"rustc 1.95.0 (59807616e 2026-04-14)\",\n  \"env_sim_container\": \"ci-39372391832-1-cg-sim\",\n  \"env_sim_image\": \"error: no such object: ci-39372391832-1-cg-sim\",\n  \"env_webots_stream_port\": \"23832\",\n  \"env_webots_version\": \"\",\n  \"env_webots_viewer_port\": \"24832\",\n  \"event\": \"workflow_dispatch\",\n  \"generated_on\": \"2026-10-20T05:03:12+00:00\",\n  \"origin_url\": \"https://github.com/syswonder/robonix\",\n  \"pr_author\": \"\",\n  \"pr_base_ref\": \"\",\n  \"pr_head_commit_url\": \"\",\n  \"pr_head_ref\": \"\",\n  \"pr_head_repo\": \"\",\n  \"pr_head_sha\": \"\",\n  \"pr_number\": \"\",\n  \"pr_title\": \"\",\n  \"pr_url\": \"\",\n  \"ref\": \"refs/heads/ci/runner-github-proxy\",\n  \"repository\": \"syswonder/robonix\",\n  \"run_attempt\": \"1\",\n  \"run_id\": \"39372391832\",\n  \"run_url\": \"https://github.com/syswonder/robonix/actions/runs/39372391832\",\n  \"runner_arch\": \"X64\",\n  \"runner_name\": \"robonix-runner-pku-rtx5090-x64\",\n  \"runner_os\": \"Linux\",\n  \"sha\": \"d6c004203d7beaf57fd9357109bb953aeceef177\",\n  \"test_report_generated_on\": \"2026-10-20T05:03:12+00:00\",\n  \"tested_commit\": \"d6c004203d7beaf57fd9357109bb953aeceef177\",\n  \"tested_commit_author\": \"Yulong Han <wheatfox17@icloud.com>\",\n  \"tested_commit_date\": \"2026-10-20T12:45:29+08:00\",\n  \"tested_commit_subject\": \"ci(testing): try the runner's own GitHub proxy before the mirrors\",\n  \"triggered_by\": \"enkerewpo\",\n  \"triggering_actor\": \"enkerewpo\",\n  \"workflow\": \"Webots Integration Tests\"\n}\n"
+    },
+    {
+      "path": "dl/robonix/robonix/testing/report/summary.md",
+      "name": "summary.md",
+      "size": 260,
+      "truncated": false,
+      "important_lines": [
+        {
+          "line": 3,
+          "text": "**Result:** `NO DATA`"
+        }
+      ],
+      "content": "## Robonix Webots CI\n\n**Result:** `NO DATA`\n**Scenarios:** `0/0`\n**Failures:** `0`\n\n| Status | Suite | Scenario | Rounds | Failures |\n| --- | --- | --- | ---: | --- |\n\nHTML report with embedded log viewer: `testing/report/index.html` in the uploaded artifact.\n"
+    }
+  ]
+}

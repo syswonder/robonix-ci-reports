@@ -1,0 +1,72 @@
+{
+  "title": "DualMap shared-inference refactor: 17/17 scenarios pass",
+  "stage": "success",
+  "summary": "The tested merge commit d3ab7aab (PR #333 head merged into dev) passed the Webots scenario suite 17/17 with no failures. The change set reworks the Scene perception stack so ConceptGraphs and DualMap share one inference implementation, adds a pinned DualMap source preparation step with an injected inference patch, and extends TensorRT export/engine building to FastSAM and a separate Replica text encoder. All exercised capabilities (camera/lidar snapshots, navigation, memory, explore, scene queries, executor builtins) behaved as expected.",
+  "pr_changes": [
+    "CI workflow installs opencv-python-headless and adds new Scene unit tests (perception models, prepare_dualmap, prepare_models, build_engines, prepare_viewer, inference_config) plus two new perception_engines tests.",
+    "Scene README documents DualMap Lite model selection, FP32 engine builds with TF32 disabled, Jetson DualMap support, the dualmap-inference.patch, point-cloud subsampling, CLIP preprocessing reuse, and the 672-square vs 640-rectangular TensorRT/Torch input difference.",
+    "Dockerfile.dualmap now copies a prepared _build/dualmap source tree and dualmap-inference.patch instead of cloning DualMap, installs requirements/scene-perception-dualmap.txt, and sets SCENE_DUALMAP_ROOT and SCENE_DUALMAP_EXPORT_CLIP.",
+    "Dockerfile.jetson adds optional DualMap requirements install, SCENE_PERCEPTION_BACKEND/SCENE_DUALMAP_ROOT env, copies _build/dualmap, and derives TensorRT export model names from inference_config.",
+    "New docker/dualmap-LICENSE (Apache-2.0) and a large docker/dualmap-inference.patch that injects an inference object into DualMap's Detector, replaces Torch mask-overlap filtering with NumPy, and makes FastSAM/YOLO/SAM/CLIP calls go through the shared implementation.",
+    "New docker/requirements/scene-perception-dualmap.txt (supervision, open_clip_torch, faiss-cpu, networkx, scikit-learn, distinctipy, plyfile, pympler, dill, tabulate).",
+    "inference_config.py adds model_profile(), backend-aware model_defaults/model_config (DualMap uses MobileSAM + MobileCLIP-S2 + FastSAM + replica CLIP), export_model_names(), and relaxes validate_tensorrt_config to accept dualmap.",
+    "cg_export.py adds _serialize_objects to accept either to_serializable() or plain lists.",
+    "perception_concept_graphs.py delegates model loading to the new perception_models.load_perception.",
+    "perception_dualmap.py adds TensorRT engine loading with prepare_dualmap.verify, model_config-driven weights, injected inference, Torch-free Replica text encoder via ONNX, and error propagation on export failure.",
+    "perception_engines.py bumps ENGINE_BUILD_VERSION to 3, generalizes letterbox/unletterbox, adds instance_masks() for FastSAM segmentation, clip interpolation option, trt_model_names(), and optional FastSAM engine loading.",
+    "New perception_models.py with load_perception() and create_clip_model() (local-weight transform reuse, capability-based reparameterization).",
+    "perception_torch.py adds device override, FastSAM support, segment_instances(), and a lock-guarded cuDNN TF32 disable/restore around CLIP image encoding.",
+    "service.py sets uvicorn timeout_graceful_shutdown=2.0.",
+    "build.sh installs viewer assets and DualMap requirements for native builds, handles DualMap weight selection, builds the DualMap image layer before TensorRT compilation, and switches NVIDIA_DRIVER_CAPABILITIES to compute,utility.",
+    "build_engines.py adds per-row embedding gates, score gates, optional replica-text and fastsam specs, TF32 disabled, and dynamic FastSAM shape profiles.",
+    "check_docker.py, export_models.py (FastSAM and Replica text export, fused-attention expansion, black/white reference inputs), prepare_docker.py, new prepare_dualmap.py, prepare_models.py, prepare_native.py, new prepare_viewer.sh, start.sh, start_native.sh updated accordingly.",
+    "Many new/updated Scene tests covering DualMap filtering, instance masks, export parity, prepare_dualmap safety, viewer assets, and inference config."
+  ],
+  "test_result": "The Webots scenario suite ran 17 scenarios across flow, builtin, and cap families and reported 17 passed, 0 failed (rate 1.0). Coverage included camera and lidar snapshots, map save, memory save/search/remember/hybrid_search/promote, navigation navigate, speech speak, voiceprint list, explore start/status/cancel, chronos wall time, executor read/write/list/run_command, and scene list_objects/goal_near. object_navigation completed explore (expected 8s ceiling), listed a scene object, resolved a reachable approach pose for potted_plant, and navigation returned SUCCEEDED. The lifecycle/rerun summary also passed with expected outage errors only.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 94,
+      "text": "RESULT: PASS — 17/17"
+    },
+    {
+      "source": "dl/_temp/scenarios.restart.out",
+      "line": 94,
+      "text": "RESULT: PASS — 17/17"
+    },
+    {
+      "source": "dl/_temp/sim-logs/rerun-ui/summary.json",
+      "line": 2,
+      "text": "\"passed\": true,"
+    },
+    {
+      "source": "system/scene/scene_service/ingest/perception_engines.py",
+      "line": 58,
+      "text": "ENGINE_BUILD_VERSION = 3"
+    },
+    {
+      "source": "system/scene/scripts/prepare_dualmap.py",
+      "line": 1,
+      "text": "Prepare the pinned DualMap source with an injectable inference implementation."
+    }
+  ],
+  "suggested_fix": "No fix required for this run. Follow up by watching the new DualMap/TensorRT paths: the 672-square TensorRT vs 640-rectangular Torch preprocessing difference can change detections, and the DualMap image layer plus FastSAM/Replica engine builds add build-time cost and new failure surfaces that this ConceptGraphs-backed scenario run does not exercise.",
+  "risks_or_watchouts": [
+    "Scenarios ran with SCENE_PERCEPTION_BACKEND=concept_graphs and SCENE_CG_INFERENCE=torch, so the new DualMap and TensorRT code paths were not exercised by this suite.",
+    "boot log warns several cached provider checkouts have uncommitted changes, so the run is not fully reproducible from branches alone.",
+    "Scene logs show repeated 'missing: gone from the tracker' churn and 'stand on unmapped ground; not registered' messages, indicating object retention instability worth monitoring.",
+    "TensorRT uses 672 square inputs while Torch keeps 640 rectangular, so backend switches can change detections; numerical comparisons must use matching preprocessing.",
+    "DualMap image layer and FastSAM/Replica engine builds add build time and new failure modes not covered by this scenario run."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-11-23T09:49:00+00:00"
+}

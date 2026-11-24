@@ -1,0 +1,63 @@
+{
+  "title": "DualMap shared-inference refactor: 17/17 scenarios pass",
+  "stage": "success",
+  "summary": "The tested merge commit (1a507a7e) of PR #333 was exercised by the Webots CI with the DualMap backend; all 17 scenarios passed (17/17). The change set reworks Scene's DualMap integration to share a single inference implementation (Torch/TensorRT) with ConceptGraphs, adds a pinned DualMap source preparation step and build-time patch, and extends model export/engine building for FastSAM and a separate Replica text encoder. No failures were observed; residual concerns are runtime warnings and non-reproducible cached provider checkouts noted in boot logs.",
+  "pr_changes": [
+    "CI workflow installs opencv-python-headless and adds new Scene test files (perception_models, prepare_dualmap, prepare_models, build_engines, prepare_viewer, inference_config) plus two new perception_engines tests.",
+    "Scene README documents DualMap Lite using MobileSAM/MobileCLIP-S2, FP32 engine builds disabling TF32, Jetson DualMap support, shared inference patch, point-cloud subsampling, and Replica export options.",
+    "Dockerfile.dualmap now copies a prepared _build/dualmap source and dualmap-inference.patch instead of git-cloning, installs requirements/scene-perception-dualmap.txt, and sets SCENE_DUALMAP_ROOT/SCENE_DUALMAP_EXPORT_CLIP.",
+    "Dockerfile.jetson adds optional DualMap requirements install, SCENE_PERCEPTION_BACKEND arg/env, copies _build/dualmap, and derives export model names from inference_config.",
+    "Added dualmap-LICENSE (Apache-2.0) and dualmap-inference.patch (1117 lines) injecting shared inference and NumPy mapping arithmetic into DualMap.",
+    "Added requirements/scene-perception-dualmap.txt (supervision, open_clip_torch, faiss-cpu, networkx, scikit-learn, etc.).",
+    "inference_config.py adds model_profile, backend-aware model_defaults/model_config (DualMap model space), export_model_names, and relaxed TensorRT validation for dualmap.",
+    "perception_dualmap.py loads models via model_config, uses load_perception for Torch/TensorRT, verifies prepared source, releases engines on stop, and reworks Replica export encoder (Torch-free TensorRT path).",
+    "perception_engines.py bumps ENGINE_BUILD_VERSION to 3, adds auto letterbox, unletterbox_boxes, instance_masks, trt_model_names, FastSAM support, and configurable CLIP interpolation.",
+    "Added perception_models.py (load_perception, create_clip_model with reparameterization and local-weight transform reuse); perception_torch.py adds device override, FastSAM, and TF32-disabled CLIP encoding under a lock.",
+    "cg_export.py adds _serialize_objects; perception_concept_graphs.py delegates to load_perception; service.py adds uvicorn timeout_graceful_shutdown.",
+    "build.sh adds viewer asset prep, DualMap requirements, DualMap weight fetching, DualMap layer build before TensorRT, and compute,utility driver capabilities; start.sh/start_native.sh/prepare_native.py/prepare_docker.py updated for DualMap and viewer paths.",
+    "build_engines.py adds replica-text and fastsam specs, per-row embedding checks, TF32 disable, and optional-model gating; export_models.py adds export_text/export_replica/export_fastsam and annotate profile.",
+    "Added prepare_dualmap.py (pinned archive fetch, checksum verify, patch apply, verify) and prepare_viewer.sh; many new/updated tests across Scene."
+  ],
+  "test_result": "Webots CI ran 17 scenarios (flow, builtin, cap) against the DualMap backend and all passed (RESULT: PASS — 17/17). Coverage included camera/lidar snapshots, map save, memory save/search/hybrid_search/promote, navigation navigate, speech, voiceprint list, explore start/status/cancel, chronos, executor builtins, and scene list_objects/goal_near. The object_navigation flow explored, listed a plant object, resolved an approach pose, and navigation returned SUCCEEDED. Scene logs show DualMapDetector running on cuda with the shared inference path.",
+  "likely_root_cause": "",
+  "evidence": [
+    {
+      "source": "dl/_temp/scenarios.out",
+      "line": 94,
+      "text": "RESULT: PASS — 17/17"
+    },
+    {
+      "source": "dl/robonix/robonix/testing/logs/summary.json",
+      "line": 5,
+      "text": "\"failed\": 0,"
+    },
+    {
+      "source": "dl/_temp/sim-logs/ci-45128735120-1-dm-scene.stdout.log",
+      "line": 0,
+      "text": "[scene-service] INFO DualMapDetector started (period=0.6s, classes=101, device=cuda, fastsam=False, keep_unknown=False)"
+    },
+    {
+      "source": "dl/_temp/sim-logs/build-webots-deployment.log",
+      "line": 0,
+      "text": "[build] DualMap layer -> robonix-scene-dualmap"
+    },
+    {
+      "source": "dl/_temp/rbnx-boot.log",
+      "line": 0,
+      "text": "⚠ audio_client_bridge: the cached checkout has uncommitted changes — this run is not reproducible from its branch alone"
+    }
+  ],
+  "suggested_fix": "No fix required for this run. Follow up by investigating the repeated 'RuntimeWarning: invalid value encountered in divide' in the Scene DualMap logs and the non-reproducible cached provider checkouts flagged during boot.",
+  "risks_or_watchouts": [
+    "Scene logs repeatedly emit 'RuntimeWarning: invalid value encountered in divide' during DualMap ticks; may indicate degenerate geometry/feature normalization.",
+    "Boot log warns several cached provider checkouts have uncommitted changes, so the run is not reproducible from branch alone.",
+    "DualMap TensorRT path is not exercised here (SCENE_CG_INFERENCE=torch); FastSAM disabled (fastsam=False) in this run.",
+    "Many objects are dropped as 'on-floor'/'overlapping'/'class_outlier' in DualMap ticks; object retention behavior worth monitoring.",
+    "Soma shutdown logs show atlas connection refused warnings during teardown (likely benign ordering)."
+  ],
+  "confidence": "high",
+  "available": true,
+  "provider": "deepseek",
+  "model": "deepseek-chat",
+  "generated_on": "2026-11-23T09:48:58+00:00"
+}
